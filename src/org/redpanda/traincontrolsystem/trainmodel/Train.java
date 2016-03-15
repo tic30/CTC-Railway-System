@@ -1,3 +1,5 @@
+package org.redpanda.traincontrolsystem.trainmodel;
+
 // Train.java
 
 /*******************************************************
