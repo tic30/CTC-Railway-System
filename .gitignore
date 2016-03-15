@@ -1,0 +1,7 @@
+# eclipse generated files
+*.classpath
+*.project
+
+# build artifacts
+*build/
+*bin/
