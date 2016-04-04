@@ -23,14 +23,14 @@ package org.redpanda.traincontrolsystem.trainmodel;
  *  	public boolean getSignalFailure()
  *  	public void setSignalFailure(boolean)
  *  	public boolean getEBrakeEngaged()
- *  	public boid setEBrakeEngaged(boolean)
+ *  	public void setEBrakeEngaged(boolean)
  *  Functionality: Model all functionality of a real train according to the
  *  	requirements document
  *  Visibility: public
  *  From requirement number: 3.2.2 Train Model
   *******************************************************/
 public class Train {
-	private static TrainModelUI ui;		// keep single instance of ui
+	private static TrainModelUI ui;		// keep single instance of UI
 	private static int trainCount = 0;	// keep track of number of active trains
 	
 	private int id;							// unique id for train
@@ -114,7 +114,7 @@ public class Train {
 	 *  Functionality: Provide number of passengers on train
 	 *  Visibility: public
 	 *  @param:
-	 *  @return: Nint umber of passengers on train
+	 *  @return: int Number of passengers on train
 	 *  From requirement number 3.2.2.3 Physical Attributes
 	*******************************************************/
 	public int getPassengerCount() {
@@ -242,7 +242,7 @@ public class Train {
 	 *  Functionality: Provide status of signal pickup: normal or failed
 	 *  Visibility: public
 	 *  @param:
-	 *  @return: true if siganl pickup has failed, false if working normally
+	 *  @return: true if signal pickup has failed, false if working normally
 	 *  From requirement number 3.2.2.6 Failure Modes
 	*******************************************************/
 	public boolean getSignalFailure() {
