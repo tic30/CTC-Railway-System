@@ -1,4 +1,8 @@
+// TrainModelUI.java
+// Author: Brian McDonald
+
 package org.redpanda.traincontrolsystem.trainmodel;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -19,7 +23,19 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 
-
+/*******************************************************
+ *  Class name: TrainModelUI
+ *  Inheritance: None
+ *  Attributes: None
+ *  Methods:
+ *  	public void addTrain(Train)
+ *  	private void updateDisplay()
+ *  	private void initializeUI()
+ *  Functionality: Display information about all active trains.
+ *  	If necessary, simulate inputs from track model and train controller
+ *  Visibility: public
+ *  From requirement number: 3.2.2 Train Model
+  *******************************************************/
 public class TrainModelUI {
 	private JFrame frmTrainModel;						// main window
 	private JTable statusTable;							// display status attributes
@@ -43,6 +59,18 @@ public class TrainModelUI {
 		trains = new ArrayList<Train>();
 	}
 	
+	/*******************************************************
+	 *  Method name: addTrain
+	 *  Inheritance: None
+	 *  Attributes: None
+	 *  Precondition: None
+	 *  Postcondition: None
+	 *  Functionality: Add a Train to the list of active Trains
+	 *  Visibility: public
+	 *  @param: train New Train to add to UI
+	 *  @return:
+	 *  From requirement number 3.2.2 Train Model
+	*******************************************************/
 	public void addTrain(Train train) {
 		int id = train.getID();
 		trains.add(train);
@@ -54,6 +82,19 @@ public class TrainModelUI {
 		}
 	}
 	
+	/*******************************************************
+	 *  Method name: updateDisplay
+	 *  Inheritance: None
+	 *  Attributes: None
+	 *  Precondition: None
+	 *  Postcondition: None
+	 *  Functionality: Refresh display with most up-to-date information
+	 *  	regarding active trains
+	 *  Visibility: private
+	 *  @param:
+	 *  @return:
+	 *  From requirement number 3.2.2 Train Model
+	*******************************************************/
 	private void updateDisplay() {
 		statusTable.setValueAt(String.valueOf(currentTrain.getSpeed()), 0, 1);
 		statusTable.setValueAt(String.valueOf(currentTrain.getSetpointSpeed()), 1, 1);
@@ -107,6 +148,18 @@ public class TrainModelUI {
 		}
 	}
 	
+	/*******************************************************
+	 *  Method name: initializeUI
+	 *  Inheritance: None
+	 *  Attributes: None
+	 *  Precondition: None
+	 *  Postcondition: None
+	 *  Functionality: Perform initial setup of GUI
+	 *  Visibility: private
+	 *  @param:
+	 *  @return:
+	 *  From requirement number 3.2.2 Train Model
+	*******************************************************/
 	private void initializeUI() {
 		// setup main window
 		frmTrainModel = new JFrame();
@@ -258,7 +311,30 @@ public class TrainModelUI {
 		frmTrainModel.setVisible(true);
 	}
 	
+	/*******************************************************
+	 *  Class name: TrainSelectionListener
+	 *  Inheritance: ListSelectionListener
+	 *  Attributes: None
+	 *  Methods:
+	 *  	public void valueChanged(ListSelectionEvent)
+	 *  Functionality: Listen for a different train being selected from the list
+	 *  Visibility: private
+	 *  From requirement number: 3.2.2 Train Model
+	  *******************************************************/
 	private class TrainSelectionListener implements ListSelectionListener {
+		/*******************************************************
+		 *  Method name: valueChanged
+		 *  Inheritance: None
+		 *  Attributes: None
+		 *  Precondition: None
+		 *  Postcondition: None
+		 *  Functionality: Display the information for the train clicked
+		 *  	in the active train list
+		 *  Visibility: public
+		 *  @param: e ListSelectionEvent specifying which train was selected
+		 *  @return:
+		 *  From requirement number 3.2.2 Train Model
+		*******************************************************/
 		public void valueChanged(ListSelectionEvent e) {
 			if(!e.getValueIsAdjusting()) {
 				if(trainList.getSelectedIndex() != -1) {
@@ -269,7 +345,31 @@ public class TrainModelUI {
 		}
 	}
 	
+	/*******************************************************
+	 *  Class name: TrainActionListener
+	 *  Inheritance: ActionListener
+	 *  Attributes: None
+	 *  Methods:
+	 *  	public void actionPerformed(ActionEvent)
+	 *  Functionality: Listen for interactions such as failures
+	 *  	and emergency braking
+	 *  Visibility: private
+	 *  From requirement number: 3.2.2 Train Model
+	  *******************************************************/
 	private class TrainActionListener implements ActionListener {
+		/*******************************************************
+		 *  Method name: actionPerformed
+		 *  Inheritance: None
+		 *  Attributes: None
+		 *  Precondition: None
+		 *  Postcondition: None
+		 *  Functionality: Set the train status appropriately for the action
+		 *  	performed and update the UI
+		 *  Visibility: private
+		 *  @param: e ActionEvent identifying which action was performed by the user
+		 *  @return:
+		 *  From requirement number 3.2.2 Train Model
+		*******************************************************/
 		public void actionPerformed(ActionEvent e) {
 			boolean engineFailure = radEngineFailureSet.isSelected();
 			boolean signalFailure = radSignalFailureSet.isSelected();
@@ -285,10 +385,25 @@ public class TrainModelUI {
 		}
 	}
 	
+	/*******************************************************
+	 *  Class name: AttributeTable
+	 *  Inheritance: AbstractTableModel
+	 *  Attributes: None
+	 *  Methods:
+	 *  	public int getColumnCount()
+	 *  	public int getRowCount()
+	 *  	public Object getValueAt(int, int)
+	 *  	public void setValueAt(Object, int, int)
+	 *  		public boolean isCellEditable(int, int)
+	 *  Functionality: Display information about all active trains.
+	 *  	If necessary, simulate inputs from track model and train controller
+	 *  Visibility: public
+	 *  From requirement number: 3.2.2 Train Model
+	  *******************************************************/
 	private class AttributeTable extends AbstractTableModel {
-		private static final long serialVersionUID = 1L;
-		private String[] columnNames = {"Item", "Value"};
-		private Object[][] values = {
+		private static final long serialVersionUID = 1L;	// this should not matter because the class will not be serialized
+		private String[] columnNames = {"Item", "Value"};	// column names
+		private Object[][] values = {						// row names
 				{"Speed", ""},
 				{"Speed Limit", ""},
 				{"Authority", ""},
@@ -303,23 +418,89 @@ public class TrainModelUI {
 				{"Emergency Brake", ""}
 		};
 		
+		/*******************************************************
+		 *  Method name: getColumnCount
+		 *  Inheritance: None
+		 *  Attributes: None
+		 *  Precondition: None
+		 *  Postcondition: None
+		 *  Functionality: Provide number of columns in table
+		 *  Visibility: public
+		 *  @param:
+		 *  @return: int Nubmer of columns in table
+		 *  From requirement number 3.2.2 Train Model
+		*******************************************************/
 		public int getColumnCount() {
 			return columnNames.length;
 		}
 
+		/*******************************************************
+		 *  Method name: getRowCount
+		 *  Inheritance: None
+		 *  Attributes: None
+		 *  Precondition: None
+		 *  Postcondition: None
+		 *  Functionality: Provide number of rows in table
+		 *  Visibility: public
+		 *  @param:
+		 *  @return: int Nubmer of rows in table
+		 *  From requirement number 3.2.2 Train Model
+		*******************************************************/
 		public int getRowCount() {
 			return values.length;
 		}
 
+		/*******************************************************
+		 *  Method name: getValueAt
+		 *  Inheritance: None
+		 *  Attributes: None
+		 *  Precondition: None
+		 *  Postcondition: None
+		 *  Functionality: Provide the value at a row and column location
+		 *  	in the table
+		 *  Visibility: public
+		 *  @param: row Row index
+		 *  		col Column index
+		 *  @return: Object stored at indicies row, col
+		 *  From requirement number 3.2.2 Train Model
+		*******************************************************/
 		public Object getValueAt(int row, int col) {
 			return values[row][col];
 		}
 		
+		/*******************************************************
+		 *  Method name: setValueAt
+		 *  Inheritance: None
+		 *  Attributes: None
+		 *  Precondition: None
+		 *  Postcondition: None
+		 *  Functionality: Set the value of the cell at a specific 
+		 *  	row and column in the table
+		 *  Visibility: public
+		 *  @param: value Object to set as value
+		 *  		row Row index
+		 *  		col Column index
+		 *  @return:
+		 *  From requirement number 3.2.2 Train Model
+		*******************************************************/
 		public void setValueAt(Object value, int row, int col) {
 			values[row][col] = (String) value;
 			fireTableCellUpdated(row, col);
 		}
 		
+		/*******************************************************
+		 *  Method name: isCellEditable
+		 *  Inheritance: None
+		 *  Attributes: None
+		 *  Precondition: None
+		 *  Postcondition: None
+		 *  Functionality: Allow no cells to be edited
+		 *  Visibility: public
+		 *  @param: row Row index in table
+		 *  		col Column index in table
+		 *  @return:
+		 *  From requirement number 3.2.2 Train Model
+		*******************************************************/
 		public boolean isCellEditable(int row, int col) {
 			return false;
 		}

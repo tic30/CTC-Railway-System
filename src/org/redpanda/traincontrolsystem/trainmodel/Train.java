@@ -1,6 +1,7 @@
-package org.redpanda.traincontrolsystem.trainmodel;
-
 // Train.java
+// Author: Brian McDonald
+
+package org.redpanda.traincontrolsystem.trainmodel;
 
 /*******************************************************
  *  Class name: Train
@@ -67,7 +68,7 @@ public class Train {
 	 *  Visibility: public
 	 *  @param:
 	 *  @return: int Unique id for train
-	 *  From requirement number
+	 *  From requirement number 3.2.2 Train Model
 	*******************************************************/
 	public int getID() {
 		return id;
