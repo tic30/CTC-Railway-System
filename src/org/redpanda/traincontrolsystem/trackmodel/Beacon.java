@@ -1,3 +1,4 @@
+package org.redpanda.traincontrolsystem.trackmodel;
 
 public class Beacon 
 { 
