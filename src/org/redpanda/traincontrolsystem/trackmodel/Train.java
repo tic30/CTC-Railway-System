@@ -1,3 +1,5 @@
+package org.redpanda.traincontrolsystem.trackmodel;
+
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Train 
