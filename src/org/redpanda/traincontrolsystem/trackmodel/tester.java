@@ -1,3 +1,5 @@
+package org.redpanda.traincontrolsystem.trackmodel;
+
 import java.awt.*;
 import java.awt.geom.Line2D;
 import javax.swing.*;
