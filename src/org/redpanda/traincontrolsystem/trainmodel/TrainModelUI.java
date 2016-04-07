@@ -138,8 +138,8 @@ public class TrainModelUI {
 	public void updateDisplay() {
 		statusTable.setValueAt(String.valueOf(currentTrain.getLastPowerCommand()), 0, 1);
 		statusTable.setValueAt(String.valueOf(currentTrain.getAcceleration()), 1, 1);
-		statusTable.setValueAt(String.valueOf(currentTrain.getSpeed()), 2, 1);
-		statusTable.setValueAt(String.valueOf(currentTrain.getSetpointSpeed()), 3, 1);
+		statusTable.setValueAt(String.valueOf(kphToMph(currentTrain.getSpeed())), 2, 1);
+		statusTable.setValueAt(String.valueOf(kphToMph(currentTrain.getSetpointSpeed())), 3, 1);
 		statusTable.setValueAt(String.valueOf(currentTrain.getAuthority()), 4, 1);
 		statusTable.setValueAt(String.valueOf(currentTrain.getTrackGrade()), 5, 1);
 		statusTable.setValueAt(String.valueOf(currentTrain.getCarCount()), 6, 1);
@@ -433,6 +433,22 @@ public class TrainModelUI {
 		
 		// set main window visible
 		frmTrainModel.setVisible(true);
+	}
+	
+	/*******************************************************
+	 *  Method name: kphToMph
+	 *  Inheritance: None
+	 *  Attributes: None
+	 *  Precondition: None
+	 *  Postcondition: None
+	 *  Functionality: Convert a speed in km/hr to mi/hr
+	 *  Visibility: public
+	 *  @param: kphSpeed Speed in km/hr
+	 *  @return:
+	 *  From requirement number 3.2.2 Train Model
+	*******************************************************/
+	private double kphToMph(double kphSpeed) {
+		return kphSpeed * 0.621371;
 	}
 	
 	/*******************************************************
