@@ -67,8 +67,10 @@ public class TrainModelUI {
 	private JButton btnSetGrade;		// button to set track grade from text box
 	
 	// train controller action tab
-	private JTextField txtPower;	// text box to enter power command
+	private JTextField txtPower;		// text box to enter power command
 	private JButton btnSetPower;		// button to set power from text box
+	private JButton btnEngageBrake;		// button to engage service brakes
+	private JButton btnDisengageBrake;	// button to disengage service brakes
 	
 	private List<Train> trains;		// keep track of all trains
 	private Train currentTrain;		// train currently being displayed
@@ -431,6 +433,16 @@ public class TrainModelUI {
 		btnSetPower.addActionListener(trainControllerListener);
 		trainControllerActionPanel.add(btnSetPower);
 		
+		btnEngageBrake = new JButton("Engage Service Brake");
+		btnEngageBrake.setBounds(51, 69, 193, 23);
+		btnEngageBrake.addActionListener(trainControllerListener);
+		trainControllerActionPanel.add(btnEngageBrake);
+		
+		btnDisengageBrake = new JButton("Disengage Service Brake");
+		btnDisengageBrake.setBounds(51, 103, 193, 23);
+		btnDisengageBrake.addActionListener(trainControllerListener);
+		trainControllerActionPanel.add(btnDisengageBrake);
+		
 		// set main window visible
 		frmTrainModel.setVisible(true);
 	}
@@ -622,6 +634,10 @@ public class TrainModelUI {
 				} catch (NumberFormatException ex) {
 					return;
 				}
+			} else if(e.getSource() == btnEngageBrake) {
+				 currentTrain.setBrakeEngaged(true);
+			} else if(e.getSource() == btnDisengageBrake) {
+				currentTrain.setBrakeEngaged(false);
 			}
 			
 			updateDisplay();
