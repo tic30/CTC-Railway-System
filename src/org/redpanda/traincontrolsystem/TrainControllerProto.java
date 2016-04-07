@@ -253,6 +253,7 @@ public class TrainControllerProto
 		{
 			engageEBrakeTC(true);
 			alertarea.setBackground(Color.red);
+			Disengage.setEnabled(false);
 		}
 		else
 		{
