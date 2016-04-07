@@ -8,26 +8,26 @@ import java.awt.geom.*;
 import java.io.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-class TrackSegment 
+class PrototypeTrackSegment 
 {
-	boolean hasTrain=false,hasStation=false;
-         int beginning,length,end,limit; 
+         boolean hasTrain=false,hasStation=false;
+         int x1,length,x2,y1,y2,limit,grade; 
          int timeLit, t, currPass;
-         String segmentName, stationName, nextStop;
+         String segName, stationName, nextStop;
         
 
-	public TrackSegment(String segname,int begin,int segLength, boolean train)
+	public PrototypeTrackSegment(int one,int two,int three, int four,int segLength, int l, int g)
 	{
-		beginning=begin; length=segLength;
-                end=beginning+length;
-                limit=ThreadLocalRandom.current().nextInt(25, 50 + 1); //random speed limit in mi/hr
-                hasTrain=train;
-                segmentName=segname;
+                x1=one; length=segLength;
+                x2=two;
+                y1=three;
+                y2=four;
+                limit=l;
+                grade=g;
                 timeLit= length/limit; //time= # miles /(speed miles/hr)
-                    //will be equal to hours, but we will show in seconds
 	}
         
-        public void giveStation(String s) 
+        public void addStation(String s) 
         {
             hasStation=true;
             stationName=s;
@@ -38,7 +38,7 @@ class TrackSegment
             nextStop=s2;
         }
         
-        public int getTimeMag() //time train is in any block (magnitude
+        public int getTimeMag() 
         {
             return timeLit;
         }
@@ -54,14 +54,14 @@ class TrackSegment
             if (!hasTrain)
             {
                 g2.setColor(Color.red);
-                g2.draw(new Line2D.Float(beginning, 100, end, 100));
+                g2.draw(new Line2D.Float(x1/10, y1/10, x2/10, y2/10));
             }
             else{
                 g2.setColor(Color.blue);
-                g2.draw(new Line2D.Float(beginning, 100, end, 100));
+                g2.draw(new Line2D.Float(x1/10, y1/10, x2/10, y2/10));
             }
-            g2.drawString(segmentName,end-50, 120);
-            g2.setFont(new Font("Times New Roman",Font.PLAIN,15));
+            //g2.drawString(segmentName,end-50, 120);
+            //g2.setFont(new Font("Times New Roman",Font.PLAIN,15));
             //g2.drawString(new String(limit + "mi/hr"),end-50, 140);
             //g2.drawString(new String(length + "mi"),end-50, 160);
             if (hasStation)
@@ -73,6 +73,7 @@ class TrackSegment
             g2.setStroke(new BasicStroke());
 	}
 }
+
 
 
 

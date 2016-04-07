@@ -1,4 +1,4 @@
-// TimerListener.java
+// TrainTimerListener.java
 // Author: Brian McDonald
 
 package org.redpanda.traincontrolsystem.timer;
