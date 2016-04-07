@@ -9,6 +9,8 @@ Goals:
 	5.Control Non-Vital operations
 */
 
+package org.redpanda.traincontrolsystem;
+
 import java.util.*;
 import java.io.*;
 import java.awt.*;
