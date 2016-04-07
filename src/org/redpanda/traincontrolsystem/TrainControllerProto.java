@@ -248,12 +248,18 @@ public class TrainControllerProto
 	public void UpdateTC()
 	{
 		//First check updates to see if train has broken
-		boolean broken = checkTrain();
-		if(broken == true)
+		int broken = checkTrain();
+		if(broken > 0)
 		{
 			engageEBrakeTC(true);
 			alertarea.setBackground(Color.red);
 			Disengage.setEnabled(false);
+			if(broken == 1)
+				randarea.setText("Engine Failure!");
+			if(broken == 2)
+				randarea.setText("Signal Pickup Failure!");
+			if(broken == 3)
+				randarea.setText("Service Brake Failure!");
 		}
 		else
 		{
@@ -371,11 +377,20 @@ public class TrainControllerProto
 			turnLightsOff();*/
 	}
 	
-	public boolean checkTrain()
+	public int checkTrain()
 	{
-		boolean temp = false;
+		int temp = 0;
 		if(engbroken == true || sigbroken == true || brakebroken == true)
-				temp = true;
+				temp = 1;
+		if(temp == 1)
+		{
+			if(engbroken == true)
+				temp = 1;
+			if(sigbroken == true)
+				temp = 2;
+			if(brakebroken == true)
+				temp = 3;
+		}
 		return temp;
 	}
 	
