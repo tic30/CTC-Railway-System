@@ -1,5 +1,3 @@
-package org.redpanda.traincontrolsystem.trackmodel;
-
 import java.awt.*;
 import java.util.*;
 import javax.swing.Timer;
@@ -16,7 +14,7 @@ public class PrototypeTrack extends JPanel implements ActionListener
 	private JButton startSim, stopSim, resetSim;  
 	private ButtonListener theListener;  
 	private Timer T;  
-        private int delay=350;//milliseconds - CHANGE LATER
+        private int delay=100;//milliseconds - CHANGE LATER
         
         private JPanel fullPanel,buttonPanel, stationPanel;
         private int totalTime=0;
@@ -27,27 +25,29 @@ public class PrototypeTrack extends JPanel implements ActionListener
         private int[] lens; //arbitrary array of seg lengths
         private PrototypeTrackSegment[] segments; //segment array
         private char[] segNames;
-        private int[] segTimes;
-        private int[] segTimeStarts;
+        private int[] segTimes,segTimeStarts, x1s,x2s, y1s, y2s,limits, grades;
 
-	public PrototypeTrack(char[] sn, int[] lengths) //numSegs=number segments, lengths is array
+	public PrototypeTrack(char[] sn, int[] lengths, int[] t1, int[] t2, int[] h1s, int[]h2s, int[] speedLimits, int[] g) //numSegs=number segments, lengths is array
 	{
-		//SEGMENT LENGTHS
                 lens=new int[lengths.length];
                 lens=lengths; //segment lengths
                 segNames=sn;
+                limits=speedLimits;
+                grades=g;
+                x1s=t1; x2s=t2;
+                y1s=h1s; y2s=h2s;
                 
-                segments=new PrototypeTrackSegment[lens.length];
+                segments=new PrototypeTrackSegment[lens.length];//REWRITE
                 segTimes=new int[lens.length];
                 segTimeStarts=new int[lens.length];
-                int last=50; //beginning x for portraying track //will have to MODIFY
+                int last=100; //beginning x for portraying track 
                 
                 //CREATE SEGMENTS, AVOID NAMES FOR NOW
                 for (int i=0; i<lens.length;i++)
                 {
-                    segments[i]=new PrototypeTrackSegment(last,lens[i]);
+                    segments[i]=new PrototypeTrackSegment(x1s[i],x2s[i],y1s[i],y2s[i],lens[i],limits[i],grades[i]);
                     segTimes[i]=segments[i].getTimeMag();
-                    last=last+lens[i]+50;
+                    last=last+lens[i]+15;
                 }
                 segments[0].hasTrain=true;
         
@@ -64,15 +64,13 @@ public class PrototypeTrack extends JPanel implements ActionListener
                 {
                     segTimeStarts[i]=segTimeStarts[i]*2;
                     totalTime=totalTime+segTimeStarts[i];
-                    System.out.println(segTimeStarts[i]);
                 }
 		
                 //BUILD PANEL
                 fullPanel=new JPanel();
                 fullPanel.setLayout(new GridLayout(2,1));
                 
-                //STATION PANEL FOR DISPLAY TRACK
-                stationPanel=new JPanel();
+                
                 
                 //SIMULATION BUTTONS
 		buttonPanel = new JPanel();
@@ -95,6 +93,9 @@ public class PrototypeTrack extends JPanel implements ActionListener
 		resetSim.addActionListener(theListener);
 		resetSim.setEnabled(false);
                 buttonPanel.add(resetSim, BorderLayout.CENTER);
+                
+                //STATION PANEL FOR DISPLAY TRACK
+                stationPanel=new JPanel();
                 
                 //Create JPanel
                 fullPanel.add(buttonPanel);
@@ -179,7 +180,11 @@ public class PrototypeTrack extends JPanel implements ActionListener
                             segments[i+1].hasTrain=true;
                             repaint();
                         }
-                        if (s==segTimeStarts[segments.length-1])
+                        if (s==segTimeStarts[4])
+                        {//station
+                            
+                        }
+                        if (s==segTimeStarts[10])
                         {   
                             endReached=true;
                             startSim.setEnabled(false);
@@ -188,16 +193,16 @@ public class PrototypeTrack extends JPanel implements ActionListener
                             hasBeenReset=true;
                             moving=false;
                             T.stop();
+                            i=100;
                         }
                     }
                 }
                 if (endReached)
                 {
-                    System.out.println("end reached");
-                    segments[segments.length-1].hasTrain=true;
+                    System.out.println("Yard Reached");
+                    segments[9].hasTrain=true;
                     repaint();
                 }
         }
 }
-
 
