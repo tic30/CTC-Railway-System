@@ -3,6 +3,9 @@
 
 package org.redpanda.traincontrolsystem.trainmodel;
 
+import java.io.IOException;
+
+import org.redpanda.traincontrolsystem.TrainController;
 import org.redpanda.traincontrolsystem.timer.TrainTimer;
 import org.redpanda.traincontrolsystem.timer.TrainTimerListener;
 
@@ -59,6 +62,7 @@ public class Train implements TrainTimerListener {
 	private static final double MAX_SERVICE_DECEL = 1.2;		// maximum deceleration rate for services brake in m/s^2
 	private static final double MAX_EMERGENCY_DECEL = 2.73;		// maximum deceleration rate for emergency brake in m/s^2
 	
+	private TrainController controller;	// train controller for train
 	private static TrainModelUI ui;		// keep single instance of UI
 	private static int trainCount = 0;	// keep track of number of active trains
 	
@@ -94,6 +98,13 @@ public class Train implements TrainTimerListener {
 			ui = TrainModelUI.getInstance();
 		}
 		ui.addTrain(this);
+		
+		try {
+			controller = new TrainController(this);
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.err.println("Could not create train controller");
+		}
 		
 		TrainTimer.getInstance().addListener(this);
 	}
@@ -706,8 +717,18 @@ public class Train implements TrainTimerListener {
 				// if not moving use max acceleration
 				acceleration = MAX_ACCEL;
 			} else {
-				// calculate acceleration
-				acceleration = powerCommand / (getMass() * speedMetersPerSecond);
+				// calculate acceleration due to engine
+				double engineAcceleration = powerCommand / (getMass() * speedMetersPerSecond);
+				
+				// calculate acceleration due to gravity
+				double gravAcceleration = G_ACCEL * Math.sin(trackGrade);
+				if(trackGrade > 0) {
+					gravAcceleration *= -1;
+				}
+				
+				System.out.println(gravAcceleration);
+				
+				acceleration = gravAcceleration + engineAcceleration;
 				
 				// don't go over max acceleration
 				if(acceleration > MAX_ACCEL) {

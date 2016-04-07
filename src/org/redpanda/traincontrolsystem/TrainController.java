@@ -11,11 +11,23 @@ Goals:
 
 package org.redpanda.traincontrolsystem;
 
-import java.util.*;
-import java.io.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.WindowConstants;
+
+import org.redpanda.traincontrolsystem.trainmodel.Train;
 
 public class TrainController
 {
@@ -225,10 +237,10 @@ public class TrainController
 	{
 		//Get the updates from the train model
 		currspeed = Tmodel.getSpeed();
-		givenspeed = getSetSpeed();
+		givenspeed = Tmodel.getSetpointSpeed();
 		authority = Tmodel.getAuthority();
 		engbroken = Tmodel.getEngineFailure();
-		sigbroken = Tmodel.getSignlaFailure();
+		sigbroken = Tmodel.getSignalFailure();
 		brakebroken = Tmodel.getBrakeFailure();
 		doorstatus = Tmodel.doorsOpen();
 		lightstatus = Tmodel.lightsOn();
@@ -350,9 +362,9 @@ public class TrainController
 	{
 		//How do i know when to turn lights on
 		if(command == true)
-			turnLightsOn();
+			Tmodel.turnLightsOn();
 		else
-			turnLightsOff();
+			Tmodel.turnLightsOff();
 	}
 	
 	public boolean checkTrain()
