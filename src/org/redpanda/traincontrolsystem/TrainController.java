@@ -360,9 +360,4 @@ public class TrainController
 				temp = true;
 		return temp;
 	}
-	
-	public static void main(String[] args) throws IOException
-	{
-		new TrainController();
-	}
 }
