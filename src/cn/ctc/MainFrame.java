@@ -3,11 +3,13 @@ import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-//import javax.swing.BorderFactory;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -15,7 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-//import javax.swing.border.Border;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import cn.ctc.bean.Schedule;
@@ -23,14 +25,12 @@ import cn.ctc.bean.Trace;
 import cn.ctc.util.ExcelUtil;
 import cn.ctc.util.ScheduleUtil;
 import java.awt.Font;
+import java.awt.Graphics;
 
+//import javax.imageio.ImageIO;
+import org.redpanda.traincontrolsystem.trackmodel;
 
 public class MainFrame extends JFrame implements ActionListener{
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 404422147759689411L;
 
 	private JPanel contentPane;
 	
@@ -45,17 +45,18 @@ public class MainFrame extends JFrame implements ActionListener{
 	private JButton btnReadInSchedule;
 	
 	List<Schedule> resultList = new ArrayList<Schedule>();
-	public JLabel label;
+	public JLabel timelabel;
 	
 	List<Trace> redTraces = new ArrayList<Trace>();
 	List<Trace> greenTraces = new ArrayList<Trace>();
 	private boolean importBl=false;
 	
 	public JTextArea textArea;
-	private JLabel lblCtcMonitoringSystem;
-	//private JLabel lblGreen;
-	
-	
+	public JTextArea textArea1;
+	public JTextArea textArea2;
+	/**
+	 * @wbp.nonvisual location=261,224
+	 */
 
 	/**
 	 * Launch the application.
@@ -67,6 +68,7 @@ public class MainFrame extends JFrame implements ActionListener{
 					MainFrame frame = new MainFrame();
 					frame.setVisible(true);
 					deleteFile();
+					TrackModel trackModel1 = new TrackModel();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -124,10 +126,10 @@ public class MainFrame extends JFrame implements ActionListener{
 		textArea = new JTextArea();
 		//contentPane.add(textArea);
 		//contentPane.add(textArea);
-		textArea.setBounds(0, 523, 786, 148);
+		textArea.setBounds(0, 523, 263, 148);
 		
 		JScrollPane scroll = new JScrollPane(textArea); 
-		scroll.setSize(786, 148);
+		scroll.setSize(263, 148);
 		scroll.setOpaque(false);
 		scroll.getViewport().setOpaque(false);
 		scroll.setLocation(0, 523);
@@ -136,30 +138,59 @@ public class MainFrame extends JFrame implements ActionListener{
 		
 		contentPane.add(scroll);
 		
-		//lblGreen = new JLabel("Green -------------------- Red ------------------- Switches");
-		//scroll.setColumnHeaderView(lblGreen);
 		
-		label = new JLabel("00:00:00");
-		label.setForeground(Color.WHITE);
-		label.setFont(new Font("Arial", Font.PLAIN, 15));
-		//Border border = BorderFactory.createLineBorder(Color.red);
-		label.setBorder(null);
-		label.setBounds(14, 32, 85, 23);
-		label.setVerticalAlignment(JLabel.CENTER);
-		label.setHorizontalAlignment(JLabel.CENTER);
-		contentPane.add(label);
+		textArea1 = new JTextArea();
+		//contentPane.add(textArea);
+		//contentPane.add(textArea);
+		textArea1.setBounds(263, 523, 263, 148);//263
 		
-		lblCtcMonitoringSystem = new JLabel("CTC Monitoring System");
-		lblCtcMonitoringSystem.setFont(new Font("Arial", Font.PLAIN, 20));
-		lblCtcMonitoringSystem.setForeground(Color.WHITE);
-		lblCtcMonitoringSystem.setBounds(14, 13, 232, 18);
-		contentPane.add(lblCtcMonitoringSystem);
+		JScrollPane scroll1 = new JScrollPane(textArea1); 
+		scroll1.setSize(263, 148);
+		scroll1.setOpaque(false);
+		scroll1.getViewport().setOpaque(false);
+		scroll1.setLocation(263, 523);
+		scroll1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED); 
+		scroll1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		
-		JTextArea trackImg = new JTextArea();
-		trackImg.setBackground(Color.DARK_GRAY);
-		trackImg.setBounds(0, 2, 994, 516);
-		contentPane.add(trackImg);
-		Timer timer = new Timer(label);//compute Timer
+		contentPane.add(scroll1);
+		
+		
+		textArea2 = new JTextArea();
+		//contentPane.add(textArea);
+		//contentPane.add(textArea);
+		textArea2.setBounds(525, 523, 263, 148);//263*2=525
+		
+		JScrollPane scroll2 = new JScrollPane(textArea2); 
+		scroll2.setSize(263, 148);
+		scroll2.setOpaque(false);
+		scroll2.getViewport().setOpaque(false);
+		scroll2.setLocation(525, 523);
+		scroll2.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED); 
+		scroll2.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		
+		contentPane.add(scroll2);
+		
+		timelabel = new JLabel("00:00:00");
+		timelabel.setForeground(Color.WHITE);
+		timelabel.setFont(new Font("Arial", Font.PLAIN, 18));
+		Border border = BorderFactory.createLineBorder(Color.red);
+		timelabel.setBorder(null);
+		timelabel.setBounds(67, 45, 93, 23);
+		timelabel.setVerticalAlignment(JLabel.CENTER);
+		timelabel.setHorizontalAlignment(JLabel.CENTER);
+		contentPane.add(timelabel);
+		
+		JLabel headname = new JLabel("CTC Monitoring System");
+		headname.setFont(new Font("Arial", Font.PLAIN, 20));
+		headname.setForeground(Color.WHITE);
+		headname.setBounds(14, 13, 224, 31);
+		contentPane.add(headname);
+		
+		JTextArea textArea_1 = new JTextArea();
+		textArea_1.setBackground(Color.DARK_GRAY);
+		textArea_1.setBounds(0, 2, 994, 516);
+		contentPane.add(textArea_1);
+		Timer timer = new Timer(timelabel);//compute Timer
 		timer.start();
 		
 		Departure departure = new Departure(this);
@@ -170,14 +201,15 @@ public class MainFrame extends JFrame implements ActionListener{
 		this.greenTraces = ExcelUtil.readTrace("Track_Layout_Vehicle_Data_vF1.xlsx", "green");//Green Trace
 	}
 
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		/*
+		
 		if(resultList!=null && resultList.size()>0){
 			for(Schedule s:resultList){
 				System.out.println(s.toString());
 			}
-		}*/
+		}
 		
 		if(e.getSource()==this.btnReadInSchedule){
 			int m = JOptionPane.showConfirmDialog(null, "Loading Schedule from file: schedule.xlsx","Confirm",JOptionPane.OK_CANCEL_OPTION);
@@ -188,13 +220,13 @@ public class MainFrame extends JFrame implements ActionListener{
 				    return;
 				}
 				List<Schedule> list = ExcelUtil.readSchedule("schedule.xlsx");
-				//int i = 1;
+				int i = 1;
 				for(Schedule s :list){
 					String content = s.getLine()+" "+s.getAuthority()+" "+s.getAuthsequence().replaceAll(",", " ")
 							+" "+ s.getSpeedsequence().replaceAll(",", " ");
 					ScheduleUtil.saveTxt(content);
-					//System.out.println(s.toString());
-					//i++;
+					System.out.println(s.toString());
+					i++;
 					this.resultList.add(s);
 					
 				}

@@ -21,16 +21,16 @@ public class Departure extends Thread{
 
 	@Override
 	public void run() {
-		//mainFrame.textArea.setText("GREEN\t\t\tRED\t\t\tSwitches");
+		mainFrame.textArea.setText("Green Line");
+		mainFrame.textArea1.setText("Red Line");
+		mainFrame.textArea2.setText("Crossing Switch");
+		String[] switchMap = this.readFileBySwitchMap();
 		while(true){
 			//System.out.println("abc");
 			if(mainFrame.resultList!=null && mainFrame.resultList.size()>0){
-				String stemp="";
 				for(Schedule s:mainFrame.resultList){
-					//System.out.println(s.toString());
-					stemp+=s.toString()+"\n";
+					System.out.println(s.toString());
 				}
-				mainFrame.textArea.setText(stemp);
 			}
 			
 			// TODO Auto-generated method stub
@@ -41,28 +41,45 @@ public class Departure extends Thread{
 		
 			if(mainFrame.resultList!=null && mainFrame.resultList.size()>0){
 				for(Schedule s: mainFrame.resultList){
-					//System.out.println(s.isIsrun());
+					System.out.println(s.isIsrun());
 					if(s.isIsrun()){
 						continue;
 					}
 					Object lock=new Object();   
 				    synchronized (lock){//ÁÙ½çÇø
-				    	String time = mainFrame.label.getText();
-						//System.out.println(time);
-						//System.out.println(s.getDeparturetime().equals(time));
-						long timeD = parseTime(s.getDeparturetime());
-						long timeC = parseTime(time);
-						//System.out.println(Math.abs(timeD-timeC));
+				    	String time = mainFrame.timelabel.getText();
+						System.out.println(time);
+						System.out.println(s.getDeparturetime().equals(time));
+						System.out.println(s.getDeparturetime());
+						long timeD = parse(s.getDeparturetime());
+						long timeC = parse(time);
+						System.out.println(Math.abs(timeD-timeC));
 						
 						if(Math.abs(timeD-timeC)<=500){
-							//System.out.println(s.getDeparturetime().equals(time));
-							//System.out.println(readFileByLines(s.getLine()));
+							System.out.println(s.getDeparturetime().equals(time));
+							String readLine = readFileByLines(s.getLine());
+							System.out.println(readLine);
 							//mainFrame.textArea.setText(mainFrame.textArea.getText()+"\n"+readFileByLines(s.getLine()));
-							//System.out.println("aaa:"+(mainFrame.textArea.getText()==null ||"".equals(mainFrame.textArea.getText().trim())));
-							if(mainFrame.textArea.getText()==null ||"".equals(mainFrame.textArea.getText().trim())){
-								mainFrame.textArea.setText(readFileByLines(s.getLine()));
+							if(s.getLine().toLowerCase().indexOf("g")>=0){
+								if(mainFrame.textArea.getText()==null ||"".equals(mainFrame.textArea.getText().trim())){
+									mainFrame.textArea.setText(readLine);
+								}else{
+									mainFrame.textArea.setText(mainFrame.textArea.getText()+"\n"+readLine);
+								}
+							}
+							
+							if(s.getLine().toLowerCase().indexOf("r")>=0){
+								if(mainFrame.textArea1.getText()==null ||"".equals(mainFrame.textArea1.getText().trim())){
+									mainFrame.textArea1.setText(readLine);
+								}else{
+									mainFrame.textArea1.setText(mainFrame.textArea1.getText()+"\n"+readLine);
+								}
+							}
+							
+							if(mainFrame.textArea2.getText()==null ||"".equals(mainFrame.textArea2.getText().trim())){
+								mainFrame.textArea2.setText(this.readFileByTrackMap(switchMap));
 							}else{
-								mainFrame.textArea.setText(mainFrame.textArea.getText()+"\n"+readFileByLines(s.getLine()));
+								mainFrame.textArea2.setText("Crossing Switch"+"\n"+this.readFileByTrackMap(switchMap));
 							}
 							s.setIsrun(true);
 						}
@@ -79,6 +96,103 @@ public class Departure extends Thread{
 			}
 		}
 		
+	}
+	
+	public String[] readFileBySwitchMap(){
+		File file = new File("switchMap.txt");
+        BufferedReader reader = null;
+        String[] switchMap=new String[8];
+        try {
+            reader = new BufferedReader(new FileReader(file));
+            String tempString = null;
+            int i=0;
+            while ((tempString = reader.readLine()) != null) {
+            	if(i>=8){
+            		break;
+            	}
+            	switchMap[i]=tempString;
+            	i++;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e1) {
+                }
+            }
+        }
+        
+        
+        return switchMap;
+        
+        
+	}
+	
+	public String readFileByTrackMap(String[] switchMap){
+		File file = new File("trackMap.txt");
+        BufferedReader reader = null;
+        String trackMap="";
+        try {
+            reader = new BufferedReader(new FileReader(file));
+            String tempString = null;
+            int i=0;
+            while ((tempString = reader.readLine()) != null) {
+            	System.out.println(tempString);
+               if(i==1){
+            	   trackMap=  tempString; 
+            	   break;
+               }
+               
+               i++;
+               
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e1) {
+                }
+            }
+        }
+        
+        if(trackMap==null ||"".equals(trackMap)){
+        	return "";
+        }
+        if(trackMap.trim().length()!=8){
+        	return "";
+        }
+        
+        System.out.println(trackMap);
+        
+        String content ="";
+        for(int i=0;i<8;i++){
+        	int index= Integer.parseInt(trackMap.substring(i,i+1));
+        	String s = switchMap[i];
+        	System.out.println(s);
+        	if(s==null ||"".equals(s.trim())){
+        		return "";
+        	}
+        	
+        	String ss[] =s.trim().split(" ");
+        	if(i==0){
+        		content=ss[index];
+        	}else{
+        		content=content+"\n"+ss[index];
+        	}
+        	
+        	
+        }
+        
+        System.out.println(content);
+        return content;
+        
+        
+        
+        
 	}
 	
 	
@@ -108,7 +222,7 @@ public class Departure extends Thread{
 	    }
 	 
 	 //00:10:00 -28200000
-	 public static long  parseTime(String time ) {
+	 public static long  parse(String time ) {
 		try {
 			java.text.SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
 			Date date = format.parse(time);
@@ -120,4 +234,8 @@ public class Departure extends Thread{
 		return 0l;
 	}
 	
+	 
+	 public static void main(String[] args) {
+		 parse("0:00:01");
+	}
 }
