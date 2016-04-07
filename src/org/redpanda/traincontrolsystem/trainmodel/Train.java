@@ -48,12 +48,12 @@ public class Train {
 	
 	private int id;							// unique id for train
 	private int carCount = 1;				// number of cars in train
-	private int crewCount = 4;				// number of crew members on train
-	private int passengerCount = 45;		// number of passengers on train
-	private int authority = 50;				// current authority of train
+	private int crewCount = 0;				// number of crew members on train
+	private int passengerCount = 0;			// number of passengers on train
+	private int authority = 0;				// current authority of train
 	private double speed = 0;				// current speed of train
-	private double setpointSpeed = 30;		// current setpoint speed of train
-	private double trackGrade = 2;			// grade of the current piece of track
+	private double setpointSpeed = 0;		// current setpoint speed of train
+	private double trackGrade = 0;			// grade of the current piece of track
 	private double power = 0;				// current power output of train
 	private double powerCommand = 0;		// last commanded power for train
 	private boolean doorsOpen = false;		// doors open/closed status
