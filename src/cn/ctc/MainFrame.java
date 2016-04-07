@@ -28,7 +28,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 
 //import javax.imageio.ImageIO;
-import org.redpanda.traincontrolsystem.trackmodel;
+import org.redpanda.traincontrolsystem.trackmodel.TrackModel;
 
 public class MainFrame extends JFrame implements ActionListener{
 
