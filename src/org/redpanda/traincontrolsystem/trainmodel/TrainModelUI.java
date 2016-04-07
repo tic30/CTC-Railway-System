@@ -40,6 +40,8 @@ import javax.swing.JTextField;
  *  From requirement number: 3.2.2 Train Model
   *******************************************************/
 public class TrainModelUI {
+	private static TrainModelUI instance;		// single instance of class
+	
 	private JFrame frmTrainModel;						// main window
 	private JTable statusTable;							// display status attributes
 	private DefaultListModel<Integer> trainListModel;	// model list of active trains
@@ -71,10 +73,30 @@ public class TrainModelUI {
 	private List<Train> trains;		// keep track of all trains
 	private Train currentTrain;		// train currently being displayed
 
-	public TrainModelUI() {
+	private TrainModelUI() {
 		initializeUI();
 		
 		trains = new ArrayList<Train>();
+	}
+	
+	/*******************************************************
+	 *  Method name: getInstance
+	 *  Inheritance: None
+	 *  Attributes: static, synchronized
+	 *  Precondition: None
+	 *  Postcondition: None
+	 *  Functionality: Provide access to single instance of TrainModelUI
+	 *  Visibility: public
+	 *  @param:
+	 *  @return: Single instance of TrainModelUI
+	 *  From requirement number 3.2.2 Train Model
+	 *******************************************************/
+	public static synchronized TrainModelUI getInstance() {
+		if(instance == null) {
+			instance = new TrainModelUI();
+		}
+		
+		return instance;
 	}
 	
 	/*******************************************************

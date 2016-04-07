@@ -61,7 +61,7 @@ public class Train {
 	
 	public Train() {
 		if(ui == null) {
-			ui = new TrainModelUI();
+			ui = TrainModelUI.getInstance();
 		}
 		
 		id = ++trainCount;
@@ -471,8 +471,6 @@ public class Train {
 	}
 	
 	public static void main(String[] args) {
-		new Train();
-		new Train();
-		new Train();
+		TrainModelUI.getInstance();
 	}
 }
