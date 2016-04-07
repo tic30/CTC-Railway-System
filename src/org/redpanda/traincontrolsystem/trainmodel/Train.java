@@ -24,7 +24,11 @@ package org.redpanda.traincontrolsystem.trainmodel;
  *  	public double getLastPowerCommand()
  *  	public double getCurrentPower()
  *  	public boolean doorsOpen()
+ *  	public void openDoors()
+ *  	public void closeDoors()
  *  	public boolean lightsOn()
+ *  	public void turnLightsOn()
+ *  	public void turnLightsOff()
  *  	public boolean getEngineFailure()
  *  	public void setEngineFailure(boolean)
  *  	public boolean getEngineFailure()
@@ -327,12 +331,44 @@ public class Train {
 	}
 	
 	/*******************************************************
+	 *  Method name: openDoors
+	 *  Inheritance: None
+	 *  Attributes: None
+	 *  Precondition: None
+	 *  Postcondition: None
+	 *  Functionality: Open the train doors
+	 *  Visibility: public
+	 *  @param:
+	 *  @return:
+	 *  From requirement number 3.2.2.3 Physical Attributes
+	*******************************************************/
+	public void openDoors() {
+		doorsOpen = true;
+	}
+	
+	/*******************************************************
+	 *  Method name: closeDoors
+	 *  Inheritance: None
+	 *  Attributes: None
+	 *  Precondition: None
+	 *  Postcondition: None
+	 *  Functionality: Close the train doors
+	 *  Visibility: public
+	 *  @param:
+	 *  @return:
+	 *  From requirement number 3.2.2.3 Physical Attributes
+	*******************************************************/
+	public void closeDoors() {
+		doorsOpen = false;
+	}
+	
+	/*******************************************************
 	 *  Method name: lightsOn
 	 *  Inheritance: None
 	 *  Attributes: None
 	 *  Precondition: None
 	 *  Postcondition: None
-	 *  Functionality: Provude status of train lights: on or off
+	 *  Functionality: Provide status of train lights: on or off
 	 *  Visibility: public
 	 *  @param:
 	 *  @return: boolean true of lights are on, false if lights are off
@@ -340,6 +376,38 @@ public class Train {
 	*******************************************************/
 	public boolean lightsOn() {
 		return lightsOn;
+	}
+	
+	/*******************************************************
+	 *  Method name: turnLightsOn
+	 *  Inheritance: None
+	 *  Attributes: None
+	 *  Precondition: None
+	 *  Postcondition: None
+	 *  Functionality: Turn train lights on
+	 *  Visibility: public
+	 *  @param:
+	 *  @return:
+	 *  From requirement number 3.2.2.3 Physical Attributes
+	*******************************************************/
+	public void turnLightsOn() {
+		lightsOn = true;
+	}
+	
+	/*******************************************************
+	 *  Method name: turnLightsOff
+	 *  Inheritance: None
+	 *  Attributes: None
+	 *  Precondition: None
+	 *  Postcondition: None
+	 *  Functionality: Turn train lights off
+	 *  Visibility: public
+	 *  @param:
+	 *  @return:
+	 *  From requirement number 3.2.2.3 Physical Attributes
+	*******************************************************/
+	public void turnLightsOff() {
+		lightsOn = false;
 	}
 	
 	/*******************************************************
