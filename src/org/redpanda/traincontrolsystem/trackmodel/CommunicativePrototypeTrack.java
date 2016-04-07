@@ -21,7 +21,7 @@ public class CommunicativePrototypeTrack extends JPanel implements ActionListene
         
          JPanel fullPanel,buttonPanel, stationPanel;
          int totalTime=0;
-        boolean  endReached=false, moving=false, hasBeenReset=true, trackEnd=false;
+        boolean  endReached=false, moving=false, hasBeenReset=true, trackEnd=false, printed=false;
          int s=0;//second timer
         
         //TRACK VARIABLES
@@ -201,6 +201,7 @@ public class CommunicativePrototypeTrack extends JPanel implements ActionListene
                         }
                         if (s==segTimeStarts[4])
                         {//station protocol
+                            if (!printed){
                             System.out.println("STOPPING AT STATION");
                             int currPass=getPassengerCount();
                             System.out.println("Current Passengers: " + currPass+ "\n");
@@ -213,6 +214,7 @@ public class CommunicativePrototypeTrack extends JPanel implements ActionListene
                             System.out.println("Passengers waiting: " + waiting +"\n");
                             System.out.println("Passengers getting on: "+gettingOn+"\n");
                             System.out.println("Passengers still at station: "+ (waiting-gettingOn)+"\n");
+                            printed=true;}
                         }
                         if (s==segTimeStarts[10])
                         {   
@@ -236,3 +238,4 @@ public class CommunicativePrototypeTrack extends JPanel implements ActionListene
                 }
         }
 }
+
