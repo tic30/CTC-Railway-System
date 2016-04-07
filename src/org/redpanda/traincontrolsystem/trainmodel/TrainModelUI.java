@@ -130,12 +130,12 @@ public class TrainModelUI {
 	 *  Postcondition: None
 	 *  Functionality: Refresh display with most up-to-date information
 	 *  	regarding active trains
-	 *  Visibility: private
+	 *  Visibility: public
 	 *  @param:
 	 *  @return:
 	 *  From requirement number 3.2.2 Train Model
 	*******************************************************/
-	private void updateDisplay() {
+	public void updateDisplay() {
 		statusTable.setValueAt(String.valueOf(currentTrain.getLastPowerCommand()), 0, 1);
 		statusTable.setValueAt(String.valueOf(currentTrain.getCurrentPower()), 1, 1);
 		statusTable.setValueAt(String.valueOf(currentTrain.getSpeed()), 2, 1);
