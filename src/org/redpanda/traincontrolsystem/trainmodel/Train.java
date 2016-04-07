@@ -52,6 +52,7 @@ import org.redpanda.traincontrolsystem.timer.TrainTimerListener;
 public class Train implements TrainTimerListener {
 	private static final double G_ACCEL = 9.8;					// acceleration due to gravity in m/s^2
 	private static final int PASSENGER_MASS = 68;				// passenger mass in kg
+	private static final int CAR_CAPACITY = 222;				// maximum number of passengers that can fit in a car
 	private static final double CAR_MASS = 40.9;				// empty car mass in kg
 	private static final double MAX_SPEED = 70.0;				// maximum speed for train in km/h
 	private static final double MAX_ACCEL = 0.5;				// maximum acceleration rate for train in m/s^s
@@ -65,6 +66,7 @@ public class Train implements TrainTimerListener {
 	private int carCount = 1;						// number of cars in train
 	private int crewCount = 1;						// number of crew members on train
 	private int passengerCount = 0;					// number of passengers on train
+	private int passengerCapacity = 0;				// max number of passengers the train can hold
 	private int authority = 0;						// current authority of train
 	private double speed = 0;						// current speed of train in km/hr
 	private double setpointSpeed = 0;				// current setpoint speed of train
@@ -80,7 +82,13 @@ public class Train implements TrainTimerListener {
 	private boolean eBrakeEngaged = false;			// emergency brake status
 	
 	public Train() {
+		this(1);
+	}
+	
+	public Train(int carCount) {
 		id = ++trainCount;
+		this.carCount = carCount;
+		passengerCapacity = carCount * CAR_CAPACITY;
 		
 		if(ui == null) {
 			ui = TrainModelUI.getInstance();
@@ -168,6 +176,48 @@ public class Train implements TrainTimerListener {
 	*******************************************************/
 	public int getPassengerCount() {
 		return passengerCount;
+	}
+	
+	/*******************************************************
+	 *  Method name: setPassengerCount
+	 *  Inheritance: None
+	 *  Attributes: None
+	 *  Precondition: None
+	 *  Postcondition: None
+	 *  Functionality: Set number of passengers on train
+	 *  Visibility: public
+	 *  @param: num Number of passengers on train
+	 *  @return: true if train can hold all passengers, false if not
+	 *  From requirement number 3.2.2.3 Physical Attributes
+	*******************************************************/
+	public boolean setPassengerCapacity(int num) {
+		if(num < 0) {
+			throw new IllegalArgumentException("Cannot have negative number of passengers");
+		}
+		
+		if(num > passengerCapacity) {
+			passengerCount = passengerCapacity;
+			return false;
+		} else {
+			passengerCount = num;
+			return true;
+		}
+	}
+	
+	/*******************************************************
+	 *  Method name: getPassengerCapacity
+	 *  Inheritance: None
+	 *  Attributes: None
+	 *  Precondition: None
+	 *  Postcondition: None
+	 *  Functionality: Provide max number of passengers train can hold
+	 *  Visibility: public
+	 *  @param:
+	 *  @return: int Number of passengers train can hold
+	 *  From requirement number 3.2.2.3 Physical Attributes
+	*******************************************************/
+	public int getPassengerCapacity() {
+		return passengerCapacity;
 	}
 
 	/*******************************************************
