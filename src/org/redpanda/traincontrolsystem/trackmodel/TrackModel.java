@@ -1,3 +1,7 @@
+package org.redpanda.traincontrolsystem.trainmodel;
+
+import org.redpanda.traincontrolsystem.trainmodel.Train;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,26 +13,26 @@ import java.util.Arrays;
 	
 public class TrackModel 
 {	
-	private JPanel bottomHalf=new JPanel();
-        private JPanel infoPanel1=new JPanel();
-        private JPanel infoPanel2=new JPanel();
-        private JPanel inputPanel=new JPanel();
-        private JPanel warningPanel=new JPanel();
-        private JButton toggleOrientation;
-        boolean toggle=false;
-        private JTextField inputFile, inputTemp,inputMaxPass;
-        private String fileName, newTemp, newPassLim;
-        private PrototypeTrack trackPanel;  
-	private JFrame window; //frame for whole window
-        private int[] lengths, speedLimits, grades, x1s,x2s,y1s, y2s; 
-        private int numSegs,trainNum;
-        private char[] segNames;
-        private int totLen=0, maxPassNum, temp;
-        private Train train;
+	 JPanel bottomHalf=new JPanel();
+         JPanel infoPanel1=new JPanel();
+         JPanel infoPanel2=new JPanel();
+         JPanel inputPanel=new JPanel();
+         JPanel warningPanel=new JPanel();
+         JButton toggleOrientation;
+         boolean toggle=false;
+         JTextField inputFile, inputTemp,inputMaxPass;
+         String fileName, newTemp, newPassLim;
+         PrototypeTrack trackPanel;  
+	 JFrame window; //frame for whole window
+         int[] lengths, speedLimits, grades, x1s,x2s,y1s, y2s; 
+         int numSegs,trainNum;
+         char[] segNames;
+         int totLen=0, maxPassNum, temp;
+         Train train;
         
-        private String[] crossings; //for pull down menu
-        private String[] switches; // for pull down menu
-        private int brokenItems=0;
+         String[] crossings; //for pull down menu
+         String[] switches; // for pull down menu
+         int brokenItems=0;
 
 	public static void main(String [] args) //no args now
 	{
@@ -38,7 +42,7 @@ public class TrackModel
         public TrackModel()
 	{
                 temp=ThreadLocalRandom.current().nextInt(20, 85 + 1); //initial temp
-                maxPassNum=ThreadLocalRandom.current().nextInt(100, 150 + 1);
+                maxPassNum=getPassengerCapacity();
                 
                 window = new JFrame("System Prototype - Track Model");
                 window.setLayout(new GridLayout(2,1)); //3 rows, one column
@@ -47,7 +51,7 @@ public class TrackModel
                 sysPrototypeTrack();
                 
                 //set train speed to min of speeds.
-                trackPanel = new PrototypeTrack(segNames,lengths,x1s,x2s,y1s,y2s,speedLimits,grades);
+                trackPanel = new CommunicativePrototypeTrack(segNames,lengths,x1s,x2s,y1s,y2s,speedLimits,grades);
                 
                 //INFO PANEL 1 - stations and crossings
                 infoPanel1.setLayout(new GridLayout(1,2));
@@ -119,7 +123,7 @@ public class TrackModel
             segNames="ABCDEFGHIJKLMN".toCharArray();
             lengths=new int[] {200,100,100,100,100,100,200,100,100,100,200,240,200};
             speedLimits=new int[] {50,50,50,50,30,30,30,30,20,40,40,40,40};
-            grades=new int[] {0,0,1,2,2,2,1,0,0,0,0,0,0};
+            grades=new int[] {0,0,1,2,2,2,-1,0,0,0,0,0,0};
             x1s=new int[] {220,420,520,590,520,420,220,150,150,150,520,720,520};
             x2s=new int[] {420,520,590,590,590,520,420,220,150,220,720,720,720};
             y1s=new int[] {320,320,320,250,80,80,80,150,150,250,320,320,80};
