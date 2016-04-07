@@ -136,16 +136,16 @@ public class TrainModelUI {
 	 *  From requirement number 3.2.2 Train Model
 	*******************************************************/
 	public void updateDisplay() {
-		statusTable.setValueAt(String.valueOf(currentTrain.getLastPowerCommand()), 0, 1);
-		statusTable.setValueAt(String.valueOf(currentTrain.getAcceleration()), 1, 1);
-		statusTable.setValueAt(String.valueOf(kphToMph(currentTrain.getSpeed())), 2, 1);
-		statusTable.setValueAt(String.valueOf(kphToMph(currentTrain.getSetpointSpeed())), 3, 1);
+		statusTable.setValueAt(String.format("%.2f", currentTrain.getLastPowerCommand()), 0, 1);
+		statusTable.setValueAt(String.format("%.2f", currentTrain.getAcceleration()), 1, 1);
+		statusTable.setValueAt(String.format("%.2f", kphToMph(currentTrain.getSpeed())), 2, 1);
+		statusTable.setValueAt(String.format("%.2f", kphToMph(currentTrain.getSetpointSpeed())), 3, 1);
 		statusTable.setValueAt(String.valueOf(currentTrain.getAuthority()), 4, 1);
-		statusTable.setValueAt(String.valueOf(currentTrain.getTrackGrade()), 5, 1);
+		statusTable.setValueAt(String.format("%.2f", currentTrain.getTrackGrade()), 5, 1);
 		statusTable.setValueAt(String.valueOf(currentTrain.getCarCount()), 6, 1);
 		statusTable.setValueAt(String.valueOf(currentTrain.getCrewCount()), 7, 1);
 		statusTable.setValueAt(String.valueOf(currentTrain.getPassengerCount()), 8, 1);
-		statusTable.setValueAt(String.valueOf(currentTrain.getMass()), 9, 1);
+		statusTable.setValueAt(String.format("%.2f", currentTrain.getMass()), 9, 1);
 		
 		if(currentTrain.doorsOpen()) {
 			statusTable.setValueAt("Open", 10, 1);
