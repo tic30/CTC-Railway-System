@@ -45,9 +45,9 @@ public class TrainController
 		//Set up some variables
 		Tmodel = ConnectedTrain;
 		maxPower = 120000;
-		Kp = -24000;
-		Ki = 1;
-		Tsample = 1;
+		Kp = 80000;
+		Ki = 300;
+		Tsample = .1;
 		givenspeed = 0;
 		speed = 0;
 		currspeed = 0;
