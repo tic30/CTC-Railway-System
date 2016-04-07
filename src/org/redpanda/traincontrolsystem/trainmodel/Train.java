@@ -190,7 +190,7 @@ public class Train implements TrainTimerListener {
 	 *  @return: true if train can hold all passengers, false if not
 	 *  From requirement number 3.2.2.3 Physical Attributes
 	*******************************************************/
-	public boolean setPassengerCapacity(int num) {
+	public boolean setPassengerCount(int num) {
 		if(num < 0) {
 			throw new IllegalArgumentException("Cannot have negative number of passengers");
 		}
