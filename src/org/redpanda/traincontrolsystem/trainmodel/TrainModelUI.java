@@ -137,7 +137,7 @@ public class TrainModelUI {
 	*******************************************************/
 	public void updateDisplay() {
 		statusTable.setValueAt(String.valueOf(currentTrain.getLastPowerCommand()), 0, 1);
-		statusTable.setValueAt(String.valueOf(currentTrain.getCurrentPower()), 1, 1);
+		statusTable.setValueAt(String.valueOf(currentTrain.getAcceleration()), 1, 1);
 		statusTable.setValueAt(String.valueOf(currentTrain.getSpeed()), 2, 1);
 		statusTable.setValueAt(String.valueOf(currentTrain.getSetpointSpeed()), 3, 1);
 		statusTable.setValueAt(String.valueOf(currentTrain.getAuthority()), 4, 1);
@@ -145,49 +145,50 @@ public class TrainModelUI {
 		statusTable.setValueAt(String.valueOf(currentTrain.getCarCount()), 6, 1);
 		statusTable.setValueAt(String.valueOf(currentTrain.getCrewCount()), 7, 1);
 		statusTable.setValueAt(String.valueOf(currentTrain.getPassengerCount()), 8, 1);
+		statusTable.setValueAt(String.valueOf(currentTrain.getMass()), 9, 1);
 		
 		if(currentTrain.doorsOpen()) {
-			statusTable.setValueAt("Open", 9, 1);
+			statusTable.setValueAt("Open", 10, 1);
 		} else {
-			statusTable.setValueAt("Closed", 9, 1);
+			statusTable.setValueAt("Closed", 10, 1);
 		}
 		
 		if(currentTrain.lightsOn()) {
-			statusTable.setValueAt("On", 10, 1);
+			statusTable.setValueAt("On", 11, 1);
 		} else {
-			statusTable.setValueAt("Off", 10, 1);
+			statusTable.setValueAt("Off", 11, 1);
 		}
 		
 		if(currentTrain.getEngineFailure()) {
 			radEngineFailureSet.setSelected(true);
-			statusTable.setValueAt("Failure", 11, 1);
+			statusTable.setValueAt("Failure", 12, 1);
 		} else {
 			radEngineFailureUnset.setSelected(true);
-			statusTable.setValueAt("Normal", 11, 1);
+			statusTable.setValueAt("Normal", 12, 1);
 		}
 
 		if(currentTrain.getSignalFailure()) {
 			radSignalFailureSet.setSelected(true);
-			statusTable.setValueAt("Failure", 12, 1);
+			statusTable.setValueAt("Failure", 13, 1);
 		} else {
 			radSignalFailureUnset.setSelected(true);
-			statusTable.setValueAt("Normal", 12, 1);
+			statusTable.setValueAt("Normal", 13, 1);
 		}
 		
 		if(currentTrain.getBrakeFailure()) {
 			radBrakeFailureSet.setSelected(true);
-			statusTable.setValueAt("Failure", 13, 1);
+			statusTable.setValueAt("Failure", 14, 1);
 		} else {
 			radBrakeFailureUnset.setSelected(true);
-			statusTable.setValueAt("Normal", 13, 1);
+			statusTable.setValueAt("Normal", 14, 1);
 		}
 		
 		if(currentTrain.getEBrakeEngaged()) {
 			radEBrakeSet.setSelected(true); 
-			statusTable.setValueAt("Engaged", 14, 1);
+			statusTable.setValueAt("Engaged", 15, 1);
 		} else {
 			radEBrakeUnset.setSelected(true);
-			statusTable.setValueAt("Not Engaged", 14, 1);
+			statusTable.setValueAt("Not Engaged", 15, 1);
 		}
 	}
 	
@@ -631,7 +632,7 @@ public class TrainModelUI {
 		private String[] columnNames = {"Item", "Value"};	// column names
 		private Object[][] values = {						// row names
 				{"Power Command", ""},
-				{"Power Output", ""},
+				{"Acceleration", ""},
 				{"Speed", ""},
 				{"Setpoint Speed", ""},
 				{"Authority", ""},
@@ -639,6 +640,7 @@ public class TrainModelUI {
 				{"Cars", ""},
 				{"Crew", ""},
 				{"Passengers", ""},
+				{"Mass", ""},
 				{"Doors", ""},
 				{"Lights", ""},
 				{"Engine", ""},
