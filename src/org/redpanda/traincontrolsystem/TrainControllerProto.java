@@ -199,10 +199,11 @@ public class TrainControllerProto
 			}
 			else if(theEventer == OpenDoors)
 			{
-				if(doorstatus == true)
+				/*if(doorstatus == true)
 					setDoors(false);
 				else
-					setDoors(true);
+					setDoors(true);*/
+				engbroken = true;
 			}
 			else if(theEventer == TurnLights)
 			{
@@ -257,35 +258,35 @@ public class TrainControllerProto
 		{
 			engageEBrakeTC(false);
 			alertarea.setBackground(Color.green);
-		}
+			
+			/*if(brake == true)
+				engageBrakeTC(true);
+			else
+				engageBrakeTC(false);*/
+			
+			String temp = "Current Speed: " + String.valueOf(currspeed) + "\n\nCurrent Authority: " + String.valueOf(authority) + "\n";
+			currentstatus.setText(temp);
+			temp = "Speed: " + String.valueOf(givenspeed) + "\n\nAuthority: " + String.valueOf(authority) + "\n";
+			ctccommand.setText(temp);
 		
-		/*if(brake == true)
-			engageBrakeTC(true);
-		else
-			engageBrakeTC(false);*/
-		
-		String temp = "Current Speed: " + String.valueOf(currspeed) + "\n\nCurrent Authority: " + String.valueOf(authority) + "\n";
-		currentstatus.setText(temp);
-		temp = "Speed: " + String.valueOf(givenspeed) + "\n\nAuthority: " + String.valueOf(authority) + "\n";
-		ctccommand.setText(temp);
-		
-		if(authority == 0)
-		{
-			brake = true;
-			MoveTrain.setEnabled(false);
-			Disengage.setEnabled(false);
-			setDoors(true);
-		}
-		else
-		{
-			setDoors(false);
-			MoveTrain.setEnabled(true);
-			Disengage.setEnabled(true);
+			if(authority == 0)
+			{
+				brake = true;
+				MoveTrain.setEnabled(false);
+				Disengage.setEnabled(false);
+				setDoors(true);
+			}
+			else
+			{
+				setDoors(false);
+				MoveTrain.setEnabled(true);
+				Disengage.setEnabled(true);
+			}
+			convertSpeed();
 		}
 		
 		theWindow.pack();
 		//theWindow.setVisible(true);
-		convertSpeed();
 	}
 	
 	public void engageBrakeTC(boolean command)
