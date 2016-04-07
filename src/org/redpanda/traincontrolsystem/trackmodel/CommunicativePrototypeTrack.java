@@ -1,6 +1,9 @@
+package org.redpanda.traincontrolsystem.trainmodel;
+
 import java.awt.*;
 import java.util.*;
 import javax.swing.Timer;
+import java.util.TimerTask;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import java.awt.event.*;
@@ -11,22 +14,22 @@ import java.util.concurrent.ThreadLocalRandom;
 public class CommunicativePrototypeTrack extends JPanel implements ActionListener
 {
 	// DISPLAY VARIABLES
-	private JButton startSim, stopSim, resetSim;  
-	private ButtonListener theListener;  
-	private Timer T;  
-        private int delay=100;//milliseconds - CHANGE LATER
+	 JButton startSim, stopSim, resetSim;  
+	 ButtonListener theListener;  
+	 Timer T;  
+         int delay=100;//milliseconds - CHANGE LATER
         
-        private JPanel fullPanel,buttonPanel, stationPanel;
-        private int totalTime=0;
+         JPanel fullPanel,buttonPanel, stationPanel;
+         int totalTime=0;
         boolean  endReached=false, moving=false, hasBeenReset=true, trackEnd=false;
-        private int s=0;//second timer
+         int s=0;//second timer
         
         //TRACK VARIABLES
-        private int[] lens;
-        private int initAuthority=4, secAuthority=6, segmentGrade; //arbitrary array of seg lengths
-        private PrototypeTrackSegment[] segments; //segment array
-        private char[] segNames;
-        private int[] segTimes,segTimeStarts, x1s,x2s, y1s, y2s,limits, grades;
+         int[] lens;
+         int initAuthority=4, secAuthority=6; //arbitrary array of seg lengths
+         PrototypeTrackSegment[] segments; //segment array
+         char[] segNames;
+         int[] segTimes,segTimeStarts, x1s,x2s, y1s, y2s,limits, grades;
 
 	public CommunicativePrototypeTrack(char[] sn, int[] lengths, int[] t1, int[] t2, int[] h1s, int[]h2s, int[] speedLimits, int[] g) //numSegs=number segments, lengths is array
 	{
@@ -136,6 +139,7 @@ public class CommunicativePrototypeTrack extends JPanel implements ActionListene
                                 s=0;
                                 moving=false;
                                 hasBeenReset=true;
+                                initAuthority=4; secAuthority=6;
                                 repaint();
                         } 
                         if (moving)
@@ -182,7 +186,7 @@ public class CommunicativePrototypeTrack extends JPanel implements ActionListene
                         {
                             segments[i].hasTrain=false;
                             segments[i+1].hasTrain=true;
-                            segmentGrade=grades[i+2];
+                            setTrackGrade(grades[i+2]);
                             repaint();
                             if (i<4)
                             {
@@ -197,7 +201,18 @@ public class CommunicativePrototypeTrack extends JPanel implements ActionListene
                         }
                         if (s==segTimeStarts[4])
                         {//station protocol
-                            
+                            System.out.println("STOPPING AT STATION");
+                            int currPass=getPassengerCount();
+                            System.out.println("Current Passengers: " + currPass+ "\n");
+                            int maxPass=getPassengerCapacity();
+                            int exiting=ThreadLocalRandom.current().nextInt(5, maxPass);
+                            System.out.println("People exiting: " + exiting +"\n");
+                            int nowOn=currPass-exiting;
+                            int waiting=ThreadLocalRandom.current().nextInt(5, 100+1);
+                            int gettingOn=maxPass-nowOn;
+                            System.out.println("Passengers waiting: " + waiting +"\n");
+                            System.out.println("Passengers getting on: "+gettingOn+"\n");
+                            System.out.println("Passengers still at station: "+ (waiting-gettingOn)+"\n");
                         }
                         if (s==segTimeStarts[10])
                         {   
@@ -221,4 +236,3 @@ public class CommunicativePrototypeTrack extends JPanel implements ActionListene
                 }
         }
 }
-
