@@ -638,10 +638,11 @@ public class Train implements TrainTimerListener {
 		double elapsedTimeSeconds = (double) elapsedTime / 1000;
 		double speedMetersPerSecond = speed / 3.6;
 		
-		// check for negative power-commands
-		if(powerCommand < 0) {
-			// engage brake if negative power is received
+		// brake if negative power or zero authority
+		if(powerCommand < 0 || authority == 0) {
 			setBrakeEngaged(true);
+		} else {
+			setBrakeEngaged(false);
 		}
 		
 		// check brakes
