@@ -1,4 +1,5 @@
 /*
+Simranjot Pabla
 TRAIN CONTROLLER FROM REDPANDACODING
 Goals:
 	1.Make train be able to brake and also to speed up
@@ -17,6 +18,7 @@ import javax.swing.*;
 public class TrainController
 {
 	private Train Tmodel;
+	private double maxPower, Tsample, Kp, Ki, uvar, prevuvar, prevpower, preverror;
 	private int ID;
 	private String[] stations;
 	private JButton MoveTrain, BrakeTrain, TrainInfo, NonVitals, EBrakeTrain, Disengage; //This entire section creates the various components that need to be displayed
@@ -28,7 +30,7 @@ public class TrainController
 	private JButton doorcontrol, lightcontrol;
 	private ControlListener theListener;
 	private Container thePane;
-	private double speed, limit, authority, givenspeed;
+	private double speed, authority, givenspeed, currspeed, power;
 	private String authority1;
 	private boolean brake, ebrake;
 	private boolean brakebroken, sigbroken, engbroken;
@@ -39,10 +41,19 @@ public class TrainController
 	public TrainController() throws IOException
 	{
 		//Set up some variables
+		maxPower = 120000;
+		Kp = -24000;
+		Ki = 1;
+		Tsample = 1;
 		givenspeed = 0;
 		speed = 0;
+		currspeed = 0;
 		authority = 0;
-		limit = 45;
+		power = 0;
+		prevpower = 0;
+		uvar = 0;
+		prevuvar = 0;
+		preverror = 0;
 		brakebroken = false;
 		sigbroken = false;
 		engbroken = false;
@@ -100,7 +111,6 @@ public class TrainController
 		buttonpanel.add(Disengage);
 		nonvitpanel.add(OpenDoors);
 		nonvitpanel.add(TurnLights);
-		//TrainInfo.setEnabled(true);
 		
 		theWindow = new JFrame("TrainController"); //This creates the window which will house everything
 		theWindow.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -118,7 +128,7 @@ public class TrainController
 			public void actionPerformed(ActionEvent e) {
 				getUpdates();
 			}
-		}
+		};
 		
 		TCTimer = new javax.swing.Timer(100, timerlistener);
 		TCTimer.start();
@@ -138,13 +148,13 @@ public class TrainController
 					String speed1 = JOptionPane.showInputDialog("Please enter a speed");
 					speed = Double.parseDouble(speed1);
 					if(speed > givenspeed)
-						JOptionPane.showMessageDialog(null, "Please enter a speed less than 45");
+						JOptionPane.showMessageDialog(null, "Please enter a speed less than " + String.valueOf(givenspeed));
 					else
 						done = true;
 				}
 				authority1 = JOptionPane.showInputDialog("Please enter an authority");
 				authority = Double.parseDouble(authority1);
-				String temp = "Current Speed: " + String.valueOf(speed) + "\n\nCurrent Authority: " + String.valueOf(authority);
+				String temp = "Current Speed: " + String.valueOf(currspeed) + "\n\nCurrent Authority: " + String.valueOf(authority);
 				currentstatus.setText(temp);
 				brake = false;
 				ebrake = false;
@@ -157,22 +167,17 @@ public class TrainController
 			}
 			else if(theEventer == TrainInfo)
 			{
-				//try
-				//{
-					thePane.remove(nonvitpanel);
-					thePane.add(mainpanel, BorderLayout.CENTER);
-				//}
-				//catch(...){}
+				thePane.remove(nonvitpanel);
+				thePane.add(mainpanel, BorderLayout.CENTER);
+				theWindow.pack();
+				theWindow.setVisible(true);
 			}
 			else if(theEventer == NonVitals)
 			{
-				//JOptionPane.showMessageDialog(null, "Opening doors");
-				//try
-				//{
-					thePane.remove(mainpanel);
-					thePane.add(nonvitpanel, BorderLayout.CENTER);
-				//}
-				//catch(...){}
+				thePane.remove(mainpanel);
+				thePane.add(nonvitpanel, BorderLayout.CENTER);
+				theWindow.pack();
+				theWindow.setVisible(true);
 			}
 			else if(theEventer == EBrakeTrain)
 			{
@@ -204,7 +209,7 @@ public class TrainController
 	
 	public void sendPowerTC()
 	{
-		
+		Tmodel.setPower(power);
 	}
 	
 	public void getIDTC()
@@ -216,7 +221,7 @@ public class TrainController
 	public void getUpdates()
 	{
 		//Get the updates from the train model
-		speed = Tmodel.getSpeed();
+		currspeed = Tmodel.getSpeed();
 		givenspeed = getSetSpeed();
 		authority = Tmodel.getAuthority();
 		engbroken = Tmodel.getEngineFailure();
@@ -224,6 +229,7 @@ public class TrainController
 		brakebroken = Tmodel.getBrakeFailure();
 		doorstatus = Tmodel.doorsOpen();
 		lightstatus = Tmodel.lightsOn();
+		
 		//Update traincontroller variables
 		UpdateTC();
 	}
@@ -248,45 +254,102 @@ public class TrainController
 		else
 			engageBrakeTC(false);
 		
-		String temp = "Current Speed: " + String.valueOf(speed) + "\n\nCurrent Authority: " + String.valueOf(authority) + "\n";
+		String temp = "Current Speed: " + String.valueOf(currspeed) + "\n\nCurrent Authority: " + String.valueOf(authority) + "\n";
 		currentstatus.setText(temp);
 		temp = "Speed: " + String.valueOf(givenspeed) + "\n\nAuthority: " + String.valueOf(authority) + "\n";
 		ctccommand.setText(temp);
 		
-		//theWindow.pack();
-		//theWindow.setVisible(true);
+		convertSpeed();
+		
+		if(authority == 0)
+		{
+			brake = true;
+			MoveTrain.setEnabled(false);
+			Disengage.setEnabled(false);
+			setDoors(true);
+		}
+		else
+		{
+			setDoors(false);
+			MoveTrain.setEnabled(true);
+			Disengage.setEnabled(true);
+		}
+		theWindow.pack();
+		theWindow.setVisible(true);
 	}
 	
 	public void engageBrakeTC(boolean command)
 	{
+		if(command == true)
+			MoveTrain.setEnabled(false);
+		else
+			MoveTrain.setEnabled(true);
+		theWindow.pack();
+		theWindow.setVisible(true);
+		
 		Tmodel.setBrakeEngaged(command);
 	}
 	
 	public void engageEBrakeTC(boolean command)
 	{
+		if(command == true)
+			MoveTrain.setEnabled(false);
+		else
+			MoveTrain.setEnabled(true);
+			
 		Tmodel.setEBrakeEngaged(command);
 	}
 	
-	private int convertSpeed()
+	private void convertSpeed()
 	{
-		int temp = 0;
-		return temp;
+		double error = speed - currspeed;
+		
+		if(error >= 0)
+		{
+			brake = false;
+			if(prevpower < maxPower)
+			{
+				uvar = prevuvar + ((Tsample/2) * (error + preverror));
+			}
+			else
+			{
+				uvar = prevuvar;
+			}
+			
+			power = (Kp * error) + (Ki * uvar);
+			
+			if(power > maxPower)
+				power = maxPower;
+		}
+		else
+		{
+			power = 0;
+			brake = true;
+		}
+		
+		prevuvar = uvar;
+		preverror = error;
+		prevpower = power;
+		
+		sendPowerTC();
 	}
 	
-	public int getLimitTC()
-	{
-		int temp = 0;
-		return temp;
-	}
-	
-	public void setDoors()
+	public void setDoors(boolean command)
 	{
 		//How long do i keep doors open, how do i know when to open
+		if(command == true)
+			Tmodel.openDoors();
+		else
+			Tmodel.closeDoors();
 	}
 	
-	public void setLights()
+	public void setLights(boolean command)
 	{
 		//How do i know when to turn lights on
+		if(command == true)
+			turnLightsOn();
+		else
+			turnLightsOff();
 	}
 	
 	public boolean checkTrain()
