@@ -38,9 +38,10 @@ public class TrainController
 	private javax.swing.Timer TCTimer;
 	private ActionListener timerlistener;
 	
-	public TrainController() throws IOException
+	public TrainController(Train ConnectedTrain) throws IOException
 	{
 		//Set up some variables
+		Tmodel = ConnectedTrain;
 		maxPower = 120000;
 		Kp = -24000;
 		Ki = 1;
