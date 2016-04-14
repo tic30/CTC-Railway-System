@@ -212,7 +212,7 @@ public class TrainModelUI {
 		frmTrainModel.setTitle("Train Model");
 		frmTrainModel.setResizable(false);
 		frmTrainModel.setBounds(100, 100, 687, 400);
-		frmTrainModel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmTrainModel.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frmTrainModel.getContentPane().setLayout(null);
 		
 		// add labels for each section
