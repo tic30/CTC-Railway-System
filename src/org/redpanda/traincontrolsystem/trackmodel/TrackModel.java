@@ -1,23 +1,12 @@
 package org.redpanda.traincontrolsystem.trackmodel;
 // TrackModel.java
 // Author: Tatiana Sunseri
-
 import java.io.File;
 import javax.swing.*;
 import java.util.*;
 
 import cn.ctc.bean.Schedule;
 import cn.ctc.bean.Trace;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import cn.ctc.util.ExcelUtil;
 import org.redpanda.traincontrolsystem.trainmodel.Train;
 
@@ -71,12 +60,12 @@ public class TrackModel
         //NEW TRACK MODEL
         public TrackModel(String filename) //New track model, specified settings
         {
-            //GET TRACK FROM FILE
-            List<Trace> t1 = ExcelUtil.readTrace(filename, "red");
-            for (Trace t : t1) { numRedSegs++;}
-            System.out.println("Reading Red Complete, Number : "+numRedSegs);
-            redSegments=new TrackSegment[numRedSegs];
-            t1 = ExcelUtil.readTrace(filename, "red");
+            //GREEN TRACK 
+            List<Trace> t1 = ExcelUtil.readTrace(filename, "green");
+            for (Trace t : t1) { numGreenSegs++;}
+            System.out.println("Reading Green Complete, Number : "+numGreenSegs);
+            greenSegments=new TrackSegment[numGreenSegs];
+            t1 = ExcelUtil.readTrace(filename, "green");
             int i=0;
             
             for (Trace t : t1) { //new track values
@@ -86,9 +75,47 @@ public class TrackModel
                double grade=t1.get(i).getBlockgrade();
                double limit=t1.get(i).getSpeedlimit();
                limit=limit* 0.621371;
-               //elevation 
+               double e=t1.get(i).getElevation();
                
-                redSegments[i]=new TrackSegment(bn, limit, len, grade, 0);
+                greenSegments[i]=new TrackSegment(bn, limit, len, grade, e);
+                String check=t1.get(i).checkForStation();
+                if (!(check==null)){
+                    greenSegments[i].giveStation(check);
+                    System.out.println(check);
+                } //segment has a station
+                
+                
+                /*if (t.checkForCrossing()){
+                    redSegments[i].hasCrossing=true;
+                }
+                if (t.checkForSwitch()){
+                    redSegments[i].hasSwitch=true;
+                }
+                if (t.checkForUnderground()){
+                    redSegments[i].isUnderground=true;
+                }*/
+               i++;
+               if (i==numGreenSegs){break;}
+           }
+            
+            //RED TRACK 
+            List<Trace> t2 = ExcelUtil.readTrace(filename, "red");
+            for (Trace t : t2) { numRedSegs++;}
+            System.out.println("Reading Red Complete, Number : "+numRedSegs);
+            redSegments=new TrackSegment[numRedSegs];
+            t2 = ExcelUtil.readTrace(filename, "red");
+            int j=0;
+            
+            for (Trace t : t2) { //new track values
+               String block=t2.get(j).getBlocknumber();
+               int bn=Integer.parseInt(block);
+               double len=t2.get(j).getBlocklength();
+               double grade=t2.get(j).getBlockgrade();
+               double limit=t2.get(j).getSpeedlimit();
+               limit=limit* 0.621371;
+               double e=t2.get(j).getElevation();
+               
+                redSegments[j]=new TrackSegment(bn, limit, len, grade, e);
                 /*if (!(t.checkForStation()==null)){
                     redSegments[i].giveStation(t.checkForStation());
                 }
@@ -102,17 +129,12 @@ public class TrackModel
                     redSegments[i].isUnderground=true;
                 }
                 System.out.println("got through round " + i);*/
-               i++;
-               if (i==numRedSegs){break;}
+              j++;
+               if (j==numRedSegs){break;}
            }
             
             /* while (still info to read)
             {
-                  //for each row
-                  * block Number = curr row, col 3
-                  * block length = curr row, col 4
-                  * block grade = curr row, col 5
-                  * speed lim = curr row, col 6 * 0.621371
                   * infrastructure
                   *     if not null 
                   *         add as specified
@@ -125,6 +147,7 @@ public class TrackModel
             //trackModelUI.addTrack();
             //if second, trackModelUI.addTrack(); again
                 
+            getSchedule();
                 
 	}
         
@@ -132,14 +155,18 @@ public class TrackModel
         {
             List<Schedule> scheduleFile = ExcelUtil.readSchedule("schedule.xlsx");
             int i = 1;
-            /*for(Schedule x :scheduleFile)
+            for(Schedule x :scheduleFile)
             {
-		String data = x.getLine()+" "+x.getAuthority()+" "x.getDepartureTime()+ " " +x.getAuthsequence().replaceAll(",", " ") +
-			" "+ x.getSpeedsequence().replaceAll(",", " ");
-			i++;
+		String l = x.getLine();
+                String d=x.getDeparturetime();
+                String as = x.getAuthsequence().replaceAll(",", " ");
+                //String ss=x.getMinSpeed().replaceAll(",", " ");
+                
+		i++;
+                //access timer
                 //create new train for that shcedule
                 //new TrainFollower(train[i],cs);
-            }*/
+            }
         }
         
         public Train[] getTrains(){
