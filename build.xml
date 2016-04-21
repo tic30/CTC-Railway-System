@@ -21,7 +21,7 @@
 		<mkdir dir="${bin}" />
 		<jar destfile="${bin}/TrackModel.jar" basedir="${build}" excludes="**/*.jar">
 			<manifest>
-				<attribute name="Main-Class" value="org.redpanda.traincontrolsystem.trackmodel.tmp3" />
+				<attribute name="Main-Class" value="org.redpanda.traincontrolsystem.trackmodel.TrackModel" />
 				<attribute name="Sealed" value="true" />
 				<attribute name="Class-Path" value="." />
 			</manifest>
