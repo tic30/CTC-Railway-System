@@ -145,7 +145,7 @@ public class TrainController
 			}
 		};
 		
-		TCTimer = new javax.swing.Timer(100, timerlistener);
+		TCTimer = new javax.swing.Timer(3000, timerlistener);
 		TCTimer.start();
 		getIDTC();
 	}
