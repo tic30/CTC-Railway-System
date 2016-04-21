@@ -35,6 +35,7 @@ public class TrainController
 	private double maxPower, Tsample, Kp, Ki, uvar, prevuvar, prevpower, preverror, error, error1;
 	private int ID;
 	private String[] stations;
+	private String nextstation, currstation;
 	//The following variables handle the UI that the driver of the train can interact with
 	private JButton MoveTrain, BrakeTrain, TrainInfo, NonVitals, EBrakeTrain, Disengage; //This entire section creates the various components that need to be displayed
 	private JButton OpenDoors, TurnLights;
@@ -72,6 +73,8 @@ public class TrainController
 		uvar = 0;
 		prevuvar = 0;
 		preverror = 0;
+		//nextstation = "";
+		//currstation = "";
 		//At the beginning, the train doesn't have any faults
 		brakebroken = false;
 		sigbroken = false;
@@ -266,11 +269,24 @@ public class TrainController
 		Tmodel.setPower(power);
 	}
 	
+	/*pubilc void ReadStations();
+	{
+		stations = Tmodel.ReadStations();
+	}
+	
+	public void getStation()
+	{
+		int temp = Integer.parseInt(nextstation);
+		currstation = stations[temp];
+		Tmodel.announceStation(currstation);
+	}*/
+	
 	//This function gets the Train ID when the Train is created
 	public void getIDTC()
 	{
 		ID = Tmodel.getID();
 		trainstatus.setText("Train ID:  " + String.valueOf(ID));
+		//ReadStations();
 	}
 	
 	//This function run every 100 milliseconds to get up to date information from Train Model
@@ -285,7 +301,7 @@ public class TrainController
 		brakebroken = Tmodel.getBrakeFailure();
 		doorstatus = Tmodel.doorsOpen();
 		lightstatus = Tmodel.lightsOn();
-		
+		//nextstation = Tmodel.checkBeacon();
 		//Update traincontroller variables
 		UpdateTC();
 	}
@@ -323,6 +339,7 @@ public class TrainController
 			MoveTrain.setEnabled(false);
 			Disengage.setEnabled(false);
 			setDoors(true);
+			//getStation();
 		}
 		else if(authority == 0)
 		{//An authority of 0 indicates that the train is to go no further thus brakes are enforced and movement no longer being allowed
