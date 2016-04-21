@@ -211,8 +211,9 @@ public class TrackModel
                         l[i]=ts[j].length; }}}
             return l;}
         
-        public String getOccupancy(int trainNum){
-            String s="";
+        public String getOccupancy(String trainName){
+            String s=trainName.charAt(0);
+            trainNum=s.substring(1,s.length());
             for (int i=0;i<trainfollowers.length;i++){
                 if (trainNum==trainfollowers[i].trainNum)
                 {
