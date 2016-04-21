@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.util.*;
 
 import cn.ctc.bean.Schedule;
+import cn.ctc.Timer;
 import cn.ctc.bean.Trace;
 import cn.ctc.util.ExcelUtil;
 import org.redpanda.traincontrolsystem.trainmodel.Train;
@@ -15,13 +16,15 @@ public class TrackModel
         private static TrackModelUI trackModelUI;
         static int clockSpeed;
         
-        Train[] trains;
+        Timer t;
         String[] switches;
         String[] crossings;
         int[] speeds;
         int numTrains=0;
         String filename;
         
+        Train[] trains;
+        TrainFollower[] trainfollowers;
         TrackSegment[] greenSegments=new TrackSegment[10];
         TrackSegment[] redSegments=new TrackSegment[10];
         int numRedSegs=0, numGreenSegs=0;
@@ -146,41 +149,28 @@ public class TrackModel
                j++;
                if (j==numRedSegs){break;}
            }
-            
-            
-            /* while (still info to read)
-            {
-                  * infrastructure
-                  *     if not null 
-                  *         add as specified
-                  *         switches++ or crossings++
-                  * elevation = curr row, col 9
-                  * switch? curr row, col 11
-                  * redSegments[int i]=new trackSegment(block num, speed lim, length, grade, elevation );
-                  * numSegs++;
-            */
-            //trackModelUI.addTrack();
-            //if second, trackModelUI.addTrack(); again
-                
-            getSchedule();
-                
+            //trackModelUI.addgreenTrack();
+            //trackModelUi.addredTrack();
+             
+            getSchedule(); 
 	}
         
         public void getSchedule()
         {
             List<Schedule> scheduleFile = ExcelUtil.readSchedule("schedule.xlsx");
-            int i = 1;
-            for(Schedule x :scheduleFile)
+            for(Schedule x :scheduleFile) {numTrains++;}
+            
+            trainfollowers=new TrainFollower[numTrains];
+            
+            int i=0;
+            for(Schedule x :scheduleFile) //while still trains to schedule
             {
-		String l = x.getLine();
-                String d=x.getDeparturetime();
-                String as = x.getAuthsequence().replaceAll(",", " ");
-                //String ss=x.getMinSpeed().replaceAll(",", " ");
-                
-		i++;
-                //access timer
-                //create new train for that shcedule
-                //new TrainFollower(train[i],cs);
+		String l = x.getLine(); //line color
+                String d=x.getDeparturetime(); //depart time
+                String as = x.getAuthsequence().replaceAll(",", " "); //auth seq
+                int ss=x.getMinSpeed(); // train speed for whole
+                trainfollowers[i]=new TrainFollower();
+                i++;
             }
         }
         
