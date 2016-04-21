@@ -64,8 +64,9 @@ public class Trace {
 		this.speedlimit = speedlimit;
 	}
         
-        public void setElevation(double e){
-                this.blockelevation=e;
+        public void setElevation(String s){
+            double d=Double.parseDouble(s);    
+            this.blockelevation=d;
         }
         
         public double getElevation(){
@@ -74,20 +75,26 @@ public class Trace {
         
         public void giveInfrastructure(String s)
         {
-            this.hasInfrastructure=true;
-            if (s.toLowerCase().contains("station")){
-                this.hasStation=true;
-                String str=new String(s);
-                this.stationName=str.substring(8,13);
+            if (s==null){
+                this.hasInfrastructure=false;
             }
-            if (s.toLowerCase().contains("switch")){
-                this.hasSwitch=true;
-            }
-            if (s.toLowerCase().contains("crossing")){
-                this.hasCrossing=true;
-            }
-            if (s.toLowerCase().contains("underground")){
-                this.isUnderground=true;
+            else{
+                this.hasInfrastructure=true;
+                if (s.toLowerCase().contains("station")){
+                    this.hasStation=true;
+                    String str=new String(s);
+                    if (!(str.length()<=8)){
+                    this.stationName=str.substring(8,10);}
+                }
+                if (s.toLowerCase().contains("switch")){
+                    this.hasSwitch=true;
+                }
+                if (s.toLowerCase().contains("crossing")){
+                    this.hasCrossing=true;
+                }
+                if (s.toLowerCase().contains("underground")){
+                    this.isUnderground=true;
+                }
             }
         }
         
