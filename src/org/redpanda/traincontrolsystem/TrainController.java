@@ -2,35 +2,32 @@
 Simranjot Pabla
 TRAIN CONTROLLER FROM REDPANDACODING
 Goals:
-	1.Make train be able to brake and also to speed up
+	1.Allow driver to enter desired speed
 	2.Read in current speed
-	3.Decode signal from track circuit
-	4.Display information to driver
-	5.Control Non-Vital operations
+	3.Calculate power command to be sent to Train Model
+	4.Decode signal from track circuit to display given speed and authority
+	5.Display train information to driver
+	7.Ensure driver entered speed doesn't go over speed limit as well as given authority
+	6.Control Non-Vital operations
+		a.Doors open at stations automatically and also upon manual button press
+		b.Lights turn on at stations as well as in tunnels, but also on manual button press
+		c.Stations are announced at correct time
 */
 
 package org.redpanda.traincontrolsystem;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
 import java.io.IOException;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 
 import org.redpanda.traincontrolsystem.trainmodel.Train;
 
 public class TrainController
 {
+	//The following variables will be used throughout the lifespan of a train after it has been launched
 	private Train Tmodel;
 	private double maxPower, Tsample, Kp, Ki, uvar, prevuvar, prevpower, preverror;
 	private int ID;
@@ -145,7 +142,7 @@ public class TrainController
 			}
 		};
 		
-		TCTimer = new javax.swing.Timer(3000, timerlistener);
+		TCTimer = new javax.swing.Timer(100, timerlistener);
 		TCTimer.start();
 		getIDTC();
 	}
