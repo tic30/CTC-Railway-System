@@ -32,6 +32,7 @@ public class TrainController
 	private double maxPower, Tsample, Kp, Ki, uvar, prevuvar, prevpower, preverror;
 	private int ID;
 	private String[] stations;
+	//The following variables handle the UI that the driver of the train can interact with
 	private JButton MoveTrain, BrakeTrain, TrainInfo, NonVitals, EBrakeTrain, Disengage; //This entire section creates the various components that need to be displayed
 	private JButton OpenDoors, TurnLights;
 	private JFrame theWindow;
@@ -41,17 +42,19 @@ public class TrainController
 	private JButton doorcontrol, lightcontrol;
 	private ControlListener theListener;
 	private Container thePane;
+	//The following variables are used to hold important information like current speed and whether or not the train has any faults
 	private double speed, authority, givenspeed, currspeed, power;
 	private String authority1;
 	private boolean brake, ebrake;
 	private boolean brakebroken, sigbroken, engbroken;
 	private boolean doorstatus, lightstatus;
+	//These variables will be the timer that allow for automatic updates
 	private javax.swing.Timer TCTimer;
 	private ActionListener timerlistener;
 	
 	public TrainController(Train ConnectedTrain) throws IOException
 	{
-		//Set up some variables
+		//Set up variables needed for train operation to begin
 		Tmodel = ConnectedTrain;
 		maxPower = 120000;
 		Kp = 10000;
@@ -66,6 +69,7 @@ public class TrainController
 		uvar = 0;
 		prevuvar = 0;
 		preverror = 0;
+		//At the beginning, the train doesn't have any faults
 		brakebroken = false;
 		sigbroken = false;
 		engbroken = false;
@@ -73,6 +77,7 @@ public class TrainController
 		ebrake = false;
 		doorstatus = false;
 		lightstatus = false;
+		//Set up the buttons that will be the source for driver interaction
 		MoveTrain = new JButton("Enter Speed"); //This section creates the buttons I will need
 		BrakeTrain = new JButton("Brakes");
 		TrainInfo = new JButton("Train Info");
@@ -91,6 +96,7 @@ public class TrainController
 		nonvitpanel = new JPanel();
 		nonvitpanel.setLayout(new GridLayout(2,1));
 		
+		//Set up the visual display for the driver in the beginning
 		trainstatus = new JTextArea("Train ID:  "); //This creates the various labels that show the user where information is
 		traininfo = new JTextArea("CTC Given Info:");
 		currentstatus = new JTextArea("Current Speed: Numbers!! \n \nCurrent Authority: Numbers!! \n");
@@ -147,25 +153,22 @@ public class TrainController
 		getIDTC();
 	}
 	
+	//The following class holds the function that handles all of the driver input and updates the display accordingly
 	private class ControlListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
 			Component theEventer = (Component) e.getSource();    //This will allow the train to read button clicks as well as
+			//This will handle the event that the driver has pushed the move train button
 			if(theEventer == MoveTrain)
 			{	
-				boolean done = false;
-				while(done == false)
+				String speed1 = JOptionPane.showInputDialog("Please enter a speed");
+				speed = Double.parseDouble(speed1);
+				if(speed > givenspeed)
 				{
-					String speed1 = JOptionPane.showInputDialog("Please enter a speed");
-					speed = Double.parseDouble(speed1);
-					if(speed > givenspeed)
-						JOptionPane.showMessageDialog(null, "Please enter a speed less than " + String.valueOf(givenspeed));
-					else
-						done = true;
+					JOptionPane.showMessageDialog(null, "Please enter a speed less than " + String.valueOf(givenspeed));
+					speed = givenspeed;
 				}
-				authority1 = JOptionPane.showInputDialog("Please enter an authority");
-				authority = Double.parseDouble(authority1);
 				String temp = "Current Speed: " + String.valueOf(currspeed) + "\n\nCurrent Authority: " + String.valueOf(authority);
 				currentstatus.setText(temp);
 				brake = false;
@@ -182,14 +185,12 @@ public class TrainController
 				thePane.remove(nonvitpanel);
 				thePane.add(mainpanel, BorderLayout.CENTER);
 				theWindow.pack();
-				//theWindow.setVisible(true);
 			}
 			else if(theEventer == NonVitals)
 			{
 				thePane.remove(mainpanel);
 				thePane.add(nonvitpanel, BorderLayout.CENTER);
 				theWindow.pack();
-				//theWindow.setVisible(true);
 			}
 			else if(theEventer == EBrakeTrain)
 			{
@@ -344,7 +345,7 @@ public class TrainController
 	
 	public void setDoors(boolean command)
 	{
-		//How long do i keep doors open, how do i know when to open
+		//
 		if(command == true)
 			Tmodel.openDoors();
 		else
@@ -353,7 +354,7 @@ public class TrainController
 	
 	public void setLights(boolean command)
 	{
-		//How do i know when to turn lights on
+		//
 		if(command == true)
 			Tmodel.turnLightsOn();
 		else
