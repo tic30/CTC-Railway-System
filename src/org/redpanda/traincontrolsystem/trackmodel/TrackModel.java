@@ -211,15 +211,17 @@ public class TrackModel
                         l[i]=ts[j].length; }}}
             return l;}
         
-        public String getOccupancy(String trainName){
-            String s=trainName.charAt(0);
-            trainNum=s.substring(1,s.length());
+       public int getOccupancy(String trainName){
+           // char s= trainName.charAt(0);
+            //String newString=(""+s);
+            int trainNum=Integer.parseInt(trainName.substring(1,trainName.length()));
+            int x=0;;
             for (int i=0;i<trainfollowers.length;i++){
                 if (trainNum==trainfollowers[i].trainNum)
                 {
-                    s=trainfollowers[i].getCurrBlock();
+                    x=trainfollowers[i].currBlock;
                 }
             }
-            return s;
+            return x; //return block train is on
         }
 }
