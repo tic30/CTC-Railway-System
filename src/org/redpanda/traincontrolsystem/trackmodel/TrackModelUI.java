@@ -21,8 +21,8 @@ public class TrackModelUI extends JPanel{
 	private JFrame theWindow; // main window
         private JComboBox switchList, crossingList;
         int numSwitches=0, numCrossings=0;
-        String[] switches=new String[10];
-        String[] crossings=new String[10];
+        String[] switches=new String[1];
+        String[] crossings=new String[1];
         
         private DefaultListModel<String> model; //warning info
 	private JList<String> failureList;
@@ -54,6 +54,7 @@ public class TrackModelUI extends JPanel{
     
     public void createModel(){
         trackModel = new TrackModel();
+        System.out.println("track instance" + trackModel);
     }
     
     public void initializeUI() {
@@ -131,13 +132,29 @@ public class TrackModelUI extends JPanel{
 	return instance;}
    
    public void addcrossingtoUI(int blockNumber){
-       switches[numSwitches]=new String("switch "+blockNumber);
+       if (numSwitches==switches.length){
+           String[] temp=new String[2*switches.length];
+           for (int i=0;i<switches.length;i++){
+               temp[i]=switches[i];}
+           switches=new String[temp.length];
+           for (int i=0;i<switches.length;i++){
+               switches[i]=temp[i];}
+       }
+       switches[numSwitches]=new String("Switch "+blockNumber);
        switchList.addItem(switches[numSwitches]);
        numSwitches++;
    }
    
    public void addswitchtoUI(int blockNumber){
-       crossings[numCrossings]=new String("switch "+blockNumber);
+       if (numCrossings==crossings.length){
+           String[] temp=new String[2*crossings.length];
+           for (int i=0;i<crossings.length;i++){
+               temp[i]=crossings[i];}
+           crossings=new String[temp.length];
+           for (int i=0;i<crossings.length;i++){
+               crossings[i]=temp[i];}
+       }
+       crossings[numCrossings]=new String("Crossing "+blockNumber);
        crossingList.addItem(crossings[numCrossings]);
        numCrossings++;
    }
@@ -152,14 +169,7 @@ public class TrackModelUI extends JPanel{
                 model.addElement("Warning: Circuit Failure on " + "");
             }
             else if(newFailure.toLowerCase().contains("power")){
-                model.addElement("Warning: Power Failure - SYSTEM STOP");
-                Train[] tempTrains=trackModel.getTrains();
-                for (int i=0;i<tempTrains.length;i++)
-                {
-                    tempTrains[i].setSpeed(0);
-                    tempTrains[i].setAuthority(0);
-                }
-            }
+                model.addElement("Warning: Power Failure - SYSTEM STOP");}
             else{
                 System.out.println("The failure is irrelevant");
             }
