@@ -15,6 +15,7 @@ public class TraceUtil {
 			BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
 			bufferWritter.write(content+"\r\n");
 			bufferWritter.close();
+			System.out.println(content);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

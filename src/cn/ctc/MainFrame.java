@@ -87,8 +87,8 @@ public class MainFrame extends JFrame implements ActionListener{
 	 * Create the frame.
 	 */
 	public MainFrame() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 0, 1000, 700);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -235,9 +235,10 @@ public class MainFrame extends JFrame implements ActionListener{
 			//System.out.println(m);
 			if(m==0){
 				if(importBl){
-					JOptionPane.showMessageDialog(null, "schedule.xlsx Was Imported Successfully", "INFORMATION",JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "schedule.xlsx Was Imported Successfully, no need to import again!", "INFORMATION",JOptionPane.INFORMATION_MESSAGE);
 				    return;
 				}
+				
 				List<Schedule> list = ExcelUtil.readSchedule("schedule.xlsx");
 				for(Schedule s :list){
 					String content = s.getLine()+" "+s.getAuthority()+" "+s.getAuthsequence().replaceAll(",", " ")

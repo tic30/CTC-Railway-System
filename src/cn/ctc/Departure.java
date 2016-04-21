@@ -41,16 +41,16 @@ public class Departure extends Thread{
 		
 			if(mainFrame.resultList!=null && mainFrame.resultList.size()>0){
 				for(Schedule s: mainFrame.resultList){
-					System.out.println(s.isIsrun());
+					//System.out.println(s.isIsrun());
 					if(s.isIsrun()){
 						continue;
 					}
 					Object lock=new Object();   
 				    synchronized (lock){//ÁÙ½çÇø
 				    	String time = mainFrame.timelabel.getText();
-						System.out.println(time);
-						System.out.println(s.getDeparturetime().equals(time));
-						System.out.println(s.getDeparturetime());
+						//System.out.println(time);
+						//System.out.println(s.getDeparturetime().equals(time));
+						//System.out.println(s.getDeparturetime());
 						long timeD = parse(s.getDeparturetime());
 						long timeC = parse(time);
 						//System.out.println(Math.abs(timeD-timeC));
@@ -139,7 +139,7 @@ public class Departure extends Thread{
             String tempString = null;
             int i=0;
             while ((tempString = reader.readLine()) != null) {
-            	System.out.println(tempString);
+            	//System.out.println(tempString);
                if(i==1){
             	   trackMap=  tempString; 
             	   break;
@@ -166,13 +166,13 @@ public class Departure extends Thread{
         	return "";
         }
         
-        System.out.println(trackMap);
+        //System.out.println(trackMap);
         
         String content ="";
         for(int i=0;i<8;i++){
         	int index= Integer.parseInt(trackMap.substring(i,i+1));
         	String s = switchMap[i];
-        	System.out.println(s);
+        	//System.out.println(s);
         	if(s==null ||"".equals(s.trim())){
         		return "";
         	}
@@ -187,7 +187,7 @@ public class Departure extends Thread{
         	
         }
         
-        System.out.println(content);
+        //System.out.println(content);
         return content;
         
         

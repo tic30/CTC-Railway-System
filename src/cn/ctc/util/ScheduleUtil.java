@@ -17,6 +17,7 @@ public class ScheduleUtil {
 			bufferWritter.write(content+"\r\n");
 			bufferWritter.close();
 			contentOutput.add(content);
+			System.out.println(content);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

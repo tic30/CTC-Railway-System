@@ -69,9 +69,9 @@ public class DispatchFrame extends JFrame implements ActionListener {
 	    comboBox_1.addItemListener(new ItemListener(){
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				System.out.println(comboBox_1.getSelectedIndex());
+				//System.out.println(comboBox_1.getSelectedIndex());
 				String line = (String)comboBox_1.getSelectedItem();
-				System.out.println(line);
+				//System.out.println(line);
 			}
 	    });
 	    contentPane.setLayout(null);
@@ -141,9 +141,9 @@ public class DispatchFrame extends JFrame implements ActionListener {
 	    comboBox_1.addItemListener(new ItemListener(){
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				System.out.println(comboBox_1.getSelectedIndex());
+				//System.out.println(comboBox_1.getSelectedIndex());
 				String line = (String)comboBox_1.getSelectedItem();
-				System.out.println(line);
+				//System.out.println(line);
 			}
 	    });
 	    contentPane.setLayout(null);
@@ -306,7 +306,7 @@ public class DispatchFrame extends JFrame implements ActionListener {
 			int i=0;
 			if(this.scheduleltList!=null && this.scheduleltList.size()>0){
 				for(Schedule temp:scheduleltList){
-					if(line.equalsIgnoreCase(temp.getLine())){
+					if(temp.getLine()!=null){//line.equalsIgnoreCase()
 						 i++;
 					}
 				}
