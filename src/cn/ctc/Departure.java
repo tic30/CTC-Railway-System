@@ -10,7 +10,7 @@ import java.util.Date;
 
 import cn.ctc.bean.Schedule;
 
-import org.redpanda.traincontrolsystem.trackmodel;
+import org.redpanda.traincontrolsystem.trackmodel.TrackModel;
 
 public class Departure extends Thread{
 	
@@ -48,7 +48,7 @@ public class Departure extends Thread{
 						continue;
 					}
 					Object lock=new Object();   
-				    synchronized (lock){//¡ŸΩÁ«¯
+				    synchronized (lock){//√Å√ô¬Ω√ß√á√∏
 				    	String time = mainFrame.timelabel.getText();
 						//System.out.println(time);
 						//System.out.println(s.getDeparturetime().equals(time));
