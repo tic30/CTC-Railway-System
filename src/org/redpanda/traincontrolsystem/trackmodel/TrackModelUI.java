@@ -1,3 +1,8 @@
+
+package org.redpanda.traincontrolsystem.trackmodel;
+
+import org.redpanda.traincontrolsystem.trainmodel.Train;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.ThreadLocalRandom;
@@ -16,8 +21,8 @@ public class TrackModelUI extends JPanel{
         private static TrackModelUI instance; // single instance of class
 	private JFrame theWindow; // main window
         private JComboBox switchList, crossingList;
-        String[] switches={ "switch 1", "switch 2", "switch 3"};
-        String[] crossings={ "crossing 1", "crossing 2", "crossing 3"};
+        String[] switches=new String[10];
+        String[] crossings=new String[10];
         
         private DefaultListModel<String> model; //warning info
 	private JList<String> failureList;
@@ -30,16 +35,15 @@ public class TrackModelUI extends JPanel{
       
         private JTextField inputTemp, inputFile, inputMaxPass;
         
-        private int temp, passLim;
+        private int temp, maxPass;
         private JLabel tempLabel, railLabel; 
         private JLabel passengerLabel=new JLabel("Number Passengers on Train: 0");
-        private JLabel passLimLabel = new JLabel("Max Number of Passengers: ");
+        private JLabel passLimLabel = new JLabel("Max Number of Passengers per Car: ");
         
         private JPanel topHalf=new JPanel();
         private JPanel infoPanel1=new JPanel();
         private JPanel infoPanel2=new JPanel();
         private JPanel inputPanel=new JPanel();
-        
         
         private TrackModel trackModel;
         
@@ -138,6 +142,12 @@ public class TrackModelUI extends JPanel{
             }
             else if(newFailure.toLowerCase().contains("power")){
                 model.addElement("Warning: Power Failure - SYSTEM STOP");
+                Train[] tempTrains=trackModel.getTrains();
+                for (int i=0;i<tempTrains.length;i++)
+                {
+                    tempTrains[i].setSpeed(0);
+                    tempTrains[i].setAuthority(0);
+                }
             }
             else{
                 System.out.println("The failure is irrelevant");
@@ -153,8 +163,8 @@ public class TrackModelUI extends JPanel{
      
      private class PassLimActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
-            passLim=Integer.parseInt(inputMaxPass.getText());
-            passLimLabel.setText("Max Number of Passengers: " + passLim);}}
+            maxPass=Integer.parseInt(inputMaxPass.getText());
+            passLimLabel.setText("Max Number of Passengers per car: " + maxPass);}}
      
      private class TempInputActionListener implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
