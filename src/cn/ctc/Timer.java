@@ -17,8 +17,10 @@ public class Timer extends Thread {
 		super();
 		this.label = label;
 		Object[] options = {"x 1","x 10"};
-		this.xtime = JOptionPane.showOptionDialog(null, "Please choose timer speed","Confirm",0,JOptionPane.INFORMATION_MESSAGE,null,options,null);
+		int tempxtime = JOptionPane.showOptionDialog(null, "Please choose timer speed","Confirm",0,JOptionPane.INFORMATION_MESSAGE,null,options,null);
 		//System.out.println(xtime);
+		if(tempxtime == 1)
+			this.xtime = 10;
 	}
 
 	@Override
