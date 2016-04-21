@@ -185,14 +185,14 @@ public class TrainController
 				thePane.remove(nonvitpanel);
 				thePane.add(mainpanel, BorderLayout.CENTER);
 				theWindow.pack();
-				theWindow.setVisible(true);
+				//theWindow.setVisible(true);
 			}
 			else if(theEventer == NonVitals)
 			{
 				thePane.remove(mainpanel);
 				thePane.add(nonvitpanel, BorderLayout.CENTER);
 				theWindow.pack();
-				theWindow.setVisible(true);
+				//theWindow.setVisible(true);
 			}
 			else if(theEventer == EBrakeTrain)
 			{
@@ -289,8 +289,6 @@ public class TrainController
 			MoveTrain.setEnabled(true);
 			Disengage.setEnabled(true);
 		}
-		theWindow.pack();
-		theWindow.setVisible(true);
 	}
 	
 	public void engageBrakeTC(boolean command)
@@ -299,8 +297,6 @@ public class TrainController
 			MoveTrain.setEnabled(false);
 		else
 			MoveTrain.setEnabled(true);
-		theWindow.pack();
-		theWindow.setVisible(true);
 		
 		Tmodel.setBrakeEngaged(command);
 	}
