@@ -9,23 +9,20 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 public class Exam2 extends Thread implements ActionListener{
-    //声明图形界面元素
     private JButton  startJb;
     private JButton stopJb;
     private JButton resetJb;
     private JLabel displayJl ;
-     
-    //定义变量存储时分秒
     int hour =0;
     int min =0;
     int sec =0 ;
     boolean isRun ;
      
     public Exam2(){
-        JFrame jf = new JFrame("计时器");
-        startJb = new JButton("开始");
-        stopJb = new JButton("结束");
-        resetJb = new JButton("重置");
+        JFrame jf = new JFrame("Timer");
+        startJb = new JButton("Start");
+        stopJb = new JButton("End");
+        resetJb = new JButton("Reset");
         displayJl = new JLabel("00:00:00");
         this.startJb.addActionListener(this);
         this.stopJb.addActionListener(this);
@@ -105,8 +102,6 @@ public class Exam2 extends Thread implements ActionListener{
             strTime = strTime+"0"+sec;
         else
             strTime = strTime+""+sec;
-         
-        //在窗体上设置显示时间
         this.displayJl.setText(strTime);
     }
      

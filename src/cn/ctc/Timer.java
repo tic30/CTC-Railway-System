@@ -1,6 +1,8 @@
 package cn.ctc;
 
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 public class Timer extends Thread {
 
@@ -9,10 +11,14 @@ public class Timer extends Thread {
 	int hour = 0;
 	int min = 0;
 	int sec = 0;
+	int xtime = 1;
 
 	public Timer(JLabel label) {
 		super();
 		this.label = label;
+		Object[] options = {"x 1","x 10"};
+		this.xtime = JOptionPane.showOptionDialog(null, "Please choose timer speed","Confirm",0,JOptionPane.INFORMATION_MESSAGE,null,options,null);
+		//System.out.println(xtime);
 	}
 
 	@Override
@@ -32,7 +38,7 @@ public class Timer extends Thread {
 			showTime();
 
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(1000/xtime);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -61,4 +67,17 @@ public class Timer extends Thread {
 		label.setText(strTime);
 	}
 
+	public static void main(String[] args){
+		JFrame frame = new JFrame("TestJFilePicker");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		//Add content to the window.
+		JLabel label1 = new JLabel();
+		new Timer(label1);
+		frame.add(label1);
+
+		//Display the window.
+		frame.pack();
+		frame.setVisible(true);
+	}
 }
