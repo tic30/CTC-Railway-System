@@ -1,15 +1,5 @@
 package org.redpanda.traincontrolsystem.trackmodel;
 
-import java.awt.*;
-import java.util.*;
-import javax.swing.Timer;
-import javax.swing.JPanel;
-import javax.swing.JButton;
-import java.awt.event.*;
-import java.awt.geom.*;
-import java.io.*;
-import java.util.concurrent.ThreadLocalRandom;
-
 class TrackSegment 
 {
          int blockNum;
@@ -24,18 +14,16 @@ class TrackSegment
          
          public TrackSegment(int bn, double sl, double l, double g, double e)
 	{
-            blockNum=bn; speedLim=sl; length=l; grade=g; elevation=e;
+            this.blockNum=bn; this.speedLim=sl; this.length=l; this.grade=g; this.elevation=e;
 	}
         
-        public void setblocknum(int i){
-            blockNum=i;
+        public void giveFailure(){
+            this.hasTrackFailure=true;
         }
         
-        public void giveFailure(){}
-        
         public void giveStation(String s){
-            stationName=s;
-            hasStation=true;
+            this.stationName=s;
+            this.hasStation=true;
         }
         
 	/*public void draw(Graphics2D g2)
