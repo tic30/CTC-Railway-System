@@ -32,7 +32,7 @@ public class TrainController
 {
 	//The following variables will be used throughout the lifespan of a train after it has been launched
 	private Train Tmodel;
-	private double maxPower, Tsample, Kp, Ki, uvar, prevuvar, prevpower, preverror;
+	private double maxPower, Tsample, Kp, Ki, uvar, prevuvar, prevpower, preverror, error, error1;
 	private int ID;
 	private String[] stations;
 	//The following variables handle the UI that the driver of the train can interact with
@@ -373,7 +373,7 @@ public class TrainController
 	//This function converts entered speed into a power command to be sent to the Train Model
 	private double convertSpeed()
 	{
-		double error = speed - currspeed;
+		error = speed - currspeed;
 		
 		if(error >= 0)
 		{
@@ -414,32 +414,32 @@ public class TrainController
 	//This function converts the speed into power and is second calculation to make sure speed is correctly converted to power
 	private double convertSpeed1()
 	{
-		double error = speed - currspeed;
-		
-		if(error >= 0)
+		error1 = speed - currspeed;
+		double power1 = 0;
+		if(error1 >= 0)
 		{
 			brake = false;
 			if(prevpower < maxPower)
 			{
-				uvar = prevuvar + ((Tsample/2) * (error + preverror));
+				uvar = prevuvar + ((Tsample/2) * (error1 + preverror));
 			}
 			else
 			{
 				uvar = prevuvar;
 			}
 		
-			power = (Kp * error) + (Ki * uvar);
+			power1 = (Kp * error1) + (Ki * uvar);
 		
-			if(power > maxPower)
-				power = maxPower;
+			if(power1 > maxPower)
+				power1 = maxPower;
 		}
 		else
 		{
-			power = 0;
+			power1 = 0;
 			brake = true;
 		}
 		
-		return power;
+		return power1;
 	}
 	
 	//This function handles opening and closing the doors by using the Train Model functions
