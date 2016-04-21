@@ -726,8 +726,6 @@ public class Train implements TrainTimerListener {
 					gravAcceleration *= -1;
 				}
 				
-				System.out.println(gravAcceleration);
-				
 				acceleration = gravAcceleration + engineAcceleration;
 				
 				// don't go over max acceleration
