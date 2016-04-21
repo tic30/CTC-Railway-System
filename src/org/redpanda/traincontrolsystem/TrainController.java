@@ -141,6 +141,7 @@ public class TrainController
 		alertarea.setBackground(Color.green);
 		theWindow.pack();
 		theWindow.setVisible(true);
+		theWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
 		//The following is the timer and listener that will just update information every 100 milliseconds
 		timerlistener = new ActionListener()
@@ -166,7 +167,10 @@ public class TrainController
 			{	
 				//A loop will ensure that the driver doesn't enter a speed above the speed limit
 				String speed1 = JOptionPane.showInputDialog("Please enter desired speed (mph)");
-				speed = Double.parseDouble(speed1);
+				if(speed1 != NULL)
+					speed = Double.parseDouble(speed1);
+				else
+					speed = speed;
 				boolean check = false;
 				if(speed > givenspeed)
 				{
