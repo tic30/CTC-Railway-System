@@ -51,6 +51,9 @@ public class TrackModelUI extends JPanel{
     
     public TrackModelUI() {
         initializeUI();
+    }
+    
+    public void createModel(){
         trackModel = new TrackModel();
     }
     
