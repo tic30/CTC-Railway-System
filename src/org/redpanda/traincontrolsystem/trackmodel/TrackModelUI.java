@@ -1,4 +1,3 @@
-
 package org.redpanda.traincontrolsystem.trackmodel;
 
 import org.redpanda.traincontrolsystem.trainmodel.Train;
