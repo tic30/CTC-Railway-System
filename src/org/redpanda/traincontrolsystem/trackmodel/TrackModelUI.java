@@ -21,6 +21,7 @@ public class TrackModelUI extends JPanel{
         private static TrackModelUI instance; // single instance of class
 	private JFrame theWindow; // main window
         private JComboBox switchList, crossingList;
+        int numSwitches=0, numCrossings=0;
         String[] switches=new String[10];
         String[] crossings=new String[10];
         
@@ -127,8 +128,16 @@ public class TrackModelUI extends JPanel{
             instance = new TrackModelUI();}
 	return instance;}
    
-   public void addTrack(){
-       
+   public void addcrossingtoUI(int blockNumber){
+       switches[numSwitches]=new String("switch "+blockNumber);
+       switchList.addItem(switches[numSwitches]);
+       numSwitches++;
+   }
+   
+   public void addswitchtoUI(int blockNumber){
+       crossings[numCrossings]=new String("switch "+blockNumber);
+       crossingList.addItem(crossings[numCrossings]);
+       numCrossings++;
    }
     
     private class AddFailureActionListener implements ActionListener {
