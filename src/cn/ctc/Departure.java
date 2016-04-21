@@ -26,13 +26,13 @@ public class Departure extends Thread{
 		mainFrame.textArea2.setText("Crossing Switch");
 		String[] switchMap = this.readFileBySwitchMap();
 		while(true){
-			//System.out.println("abc");
+			/*
 			if(mainFrame.resultList!=null && mainFrame.resultList.size()>0){
 				for(Schedule s:mainFrame.resultList){
 					System.out.println(s.toString());
 				}
 			}
-			
+			*/
 			// TODO Auto-generated method stub
 			//super.run();
 			//mainFrame.textArea.setText("1111");
@@ -53,12 +53,12 @@ public class Departure extends Thread{
 						System.out.println(s.getDeparturetime());
 						long timeD = parse(s.getDeparturetime());
 						long timeC = parse(time);
-						System.out.println(Math.abs(timeD-timeC));
+						//System.out.println(Math.abs(timeD-timeC));
 						
 						if(Math.abs(timeD-timeC)<=500){
-							System.out.println(s.getDeparturetime().equals(time));
+							//System.out.println(s.getDeparturetime().equals(time));
 							String readLine = readFileByLines(s.getLine());
-							System.out.println(readLine);
+							//System.out.println(readLine);
 							//mainFrame.textArea.setText(mainFrame.textArea.getText()+"\n"+readFileByLines(s.getLine()));
 							if(s.getLine().toLowerCase().indexOf("g")>=0){
 								if(mainFrame.textArea.getText()==null ||"".equals(mainFrame.textArea.getText().trim())){

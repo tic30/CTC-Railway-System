@@ -5,11 +5,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -17,18 +15,16 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+
 
 import cn.ctc.bean.Schedule;
 import cn.ctc.bean.Trace;
+import cn.ctc.trackpaint.trackimage;
 import cn.ctc.util.ExcelUtil;
 import cn.ctc.util.ScheduleUtil;
 import java.awt.Font;
-import java.awt.Graphics;
-
-//import javax.imageio.ImageIO;
-import org.redpanda.traincontrolsystem.trackmodel.TrackModel;
+//import org.redpanda.traincontrolsystem.trackmodel;
 
 public class MainFrame extends JFrame implements ActionListener{
 
@@ -54,6 +50,9 @@ public class MainFrame extends JFrame implements ActionListener{
 	public JTextArea textArea;
 	public JTextArea textArea1;
 	public JTextArea textArea2;
+	private BufferedImage image;
+	
+	private trackimage trackPanel;
 	/**
 	 * @wbp.nonvisual location=261,224
 	 */
@@ -68,7 +67,7 @@ public class MainFrame extends JFrame implements ActionListener{
 					MainFrame frame = new MainFrame();
 					frame.setVisible(true);
 					deleteFile();
-					TrackModel trackModel1 = new TrackModel();
+//					TrackModel trackModel1 = new TrackModel();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -122,11 +121,34 @@ public class MainFrame extends JFrame implements ActionListener{
 		btnUpdateSpeed.addActionListener(this);
 		btnReadInSchedule.addActionListener(this);
 		
+		//paint track
+		/*
+		char[] segNames="ABCDEFGHIJKLMN".toCharArray();
+		int[] lengths=new int[] {200,100,100,100,100,100,200,100,100,100,200,240,200};
+		int[] speedLimits=new int[] {50,50,50,50,30,30,30,30,20,40,40,40,40};
+		int[] grades=new int[] {0,0,1,2,2,2,1,0,0,0,0,0,0};
+		int[] x1s=new int[] {220,420,520,590,520,420,220,150,150,150,520,720,520};
+		int[] x2s=new int[] {420,520,590,590,590,520,420,220,150,220,720,720,720};
+		int[] y1s=new int[] {320,320,320,250,80,80,80,150,150,250,320,320,80};
+		int[] y2s=new int[] {320,320,250,150,150,80,80,80,250,320,320,80,80};
+		trackPanel = new cn.ctc.trackpaint.PrototypeTrack(segNames,lengths,x1s,x2s,y1s,y2s,speedLimits,grades);
+		trackPanel.setOpaque( false ) ;
+		trackPanel.setSize(966, 401);
+		trackPanel.setLocation(14, 81);
+		trackPanel.setBorder(null);
+		contentPane.add(trackPanel);
+		*/
 		
 		textArea = new JTextArea();
 		//contentPane.add(textArea);
 		//contentPane.add(textArea);
 		textArea.setBounds(0, 523, 263, 148);
+		trackPanel = new cn.ctc.trackpaint.trackimage();
+		trackPanel.setOpaque( false ) ;
+		trackPanel.setSize(966, 401);
+		trackPanel.setLocation(14, 81);
+		trackPanel.setBorder(null);
+		contentPane.add(trackPanel);
 		
 		JScrollPane scroll = new JScrollPane(textArea); 
 		scroll.setSize(263, 148);
@@ -173,7 +195,6 @@ public class MainFrame extends JFrame implements ActionListener{
 		timelabel = new JLabel("00:00:00");
 		timelabel.setForeground(Color.WHITE);
 		timelabel.setFont(new Font("Arial", Font.PLAIN, 18));
-		Border border = BorderFactory.createLineBorder(Color.red);
 		timelabel.setBorder(null);
 		timelabel.setBounds(67, 45, 93, 23);
 		timelabel.setVerticalAlignment(JLabel.CENTER);
@@ -196,12 +217,10 @@ public class MainFrame extends JFrame implements ActionListener{
 		Departure departure = new Departure(this);
 		departure.start();
 		
-		
 		this.redTraces = ExcelUtil.readTrace("Track_Layout_Vehicle_Data_vF1.xlsx", "red");//Red Trace
 		this.greenTraces = ExcelUtil.readTrace("Track_Layout_Vehicle_Data_vF1.xlsx", "green");//Green Trace
 	}
-
-
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
@@ -220,15 +239,12 @@ public class MainFrame extends JFrame implements ActionListener{
 				    return;
 				}
 				List<Schedule> list = ExcelUtil.readSchedule("schedule.xlsx");
-				int i = 1;
 				for(Schedule s :list){
 					String content = s.getLine()+" "+s.getAuthority()+" "+s.getAuthsequence().replaceAll(",", " ")
 							+" "+ s.getSpeedsequence().replaceAll(",", " ");
 					ScheduleUtil.saveTxt(content);
 					System.out.println(s.toString());
-					i++;
-					this.resultList.add(s);
-					
+					this.resultList.add(s);					
 				}
 				importBl = true;
 				JOptionPane.showMessageDialog(null, "Import schedule.xlsx Successfully", "INFORMATION",JOptionPane.INFORMATION_MESSAGE);

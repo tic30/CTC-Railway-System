@@ -62,9 +62,6 @@ public class UpdateAuthorityFrame extends JFrame implements ActionListener{
 		lblNewLabel.setBounds(10, 78, 175, 32);
 		getContentPane().add(lblNewLabel);
 		
-		
-		
-		
 		comboBox=new JComboBox();
 	    comboBox.addItemListener(new ItemListener(){
 			@Override
@@ -131,7 +128,8 @@ public class UpdateAuthorityFrame extends JFrame implements ActionListener{
 			Schedule schedule = this.resultList.get(index);
 			if(schedule.getAuthority()+Integer.parseInt(authority)<=0){
 				JOptionPane.showMessageDialog(null, "Stop the train now", "INFORMATION",JOptionPane.INFORMATION_MESSAGE);
-				authority = "-"+schedule.getAuthority();
+				//authority = "-"+schedule.getAuthority();
+				authority = "0";
 				//return ;
 			}
 			
@@ -146,8 +144,8 @@ public class UpdateAuthorityFrame extends JFrame implements ActionListener{
 				
 				String contents [] = content.trim().split(" ");
 				int len = contents.length;
-				System.out.println(len);
-				System.out.println(authority+schedule.getAuthority());
+				//System.out.println(len);
+				//System.out.println(authority+schedule.getAuthority());
 				if(len!=(Integer.parseInt(authority)+schedule.getAuthority())*2){
 					JOptionPane.showMessageDialog(null, "Authority Sequence And Speed Sequence Length Is Wrong", "INFORMATION",JOptionPane.INFORMATION_MESSAGE);
 					return ;

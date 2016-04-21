@@ -224,8 +224,9 @@ public class UpdateSpeedFrame extends JFrame implements ActionListener{
 				newSpeed = trace.getSpeedlimit()+Double.parseDouble(speed);
 				
 				if(newSpeed<=0){
-					JOptionPane.showMessageDialog(null, "Speed Change  Is Not Less than Zero ", "INFORMATION",JOptionPane.INFORMATION_MESSAGE);
-					return ;
+					//JOptionPane.showMessageDialog(null, "Speed Change  Is Not Less than Zero ", "INFORMATION",JOptionPane.INFORMATION_MESSAGE);
+					//return ;
+					newSpeed = 0;
 				}
 				trace.setSpeedlimit(newSpeed);
 				this.redTraces.remove(index);

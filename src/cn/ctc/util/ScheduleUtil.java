@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class ScheduleUtil {
-	public static ArrayList<String> contentOutput;
+	public static ArrayList<String> contentOutput = new ArrayList<String>();
 
 	public static void saveTxt(String content) {
 		try {
@@ -16,7 +16,7 @@ public class ScheduleUtil {
 			BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
 			bufferWritter.write(content+"\r\n");
 			bufferWritter.close();
-			//contentOutput.add(content);
+			contentOutput.add(content);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -24,7 +24,7 @@ public class ScheduleUtil {
 
 	}
 	
-	//1001
+	//to be called by track model
 	public static ArrayList<String> getSchedule(){
 		return contentOutput;
 	}
