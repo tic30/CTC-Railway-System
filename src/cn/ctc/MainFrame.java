@@ -24,7 +24,7 @@ import cn.ctc.trackpaint.trackimage;
 import cn.ctc.util.ExcelUtil;
 import cn.ctc.util.ScheduleUtil;
 import java.awt.Font;
-import org.redpanda.traincontrolsystem.trackmodel;
+import org.redpanda.traincontrolsystem.trackmodel.TrackModel;
 
 public class MainFrame extends JFrame implements ActionListener{
 
