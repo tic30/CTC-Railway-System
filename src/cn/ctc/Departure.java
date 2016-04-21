@@ -10,6 +10,8 @@ import java.util.Date;
 
 import cn.ctc.bean.Schedule;
 
+import org.redpanda.traincontrolsystem.trackmodel;
+
 public class Departure extends Thread{
 	
 	private MainFrame mainFrame;
@@ -75,7 +77,7 @@ public class Departure extends Thread{
 									mainFrame.textArea1.setText(mainFrame.textArea1.getText()+"\n"+readLine);
 								}
 							}
-							
+							//System.out.println(this.readFileByTrackMap(switchMap));
 							if(mainFrame.textArea2.getText()==null ||"".equals(mainFrame.textArea2.getText().trim())){
 								mainFrame.textArea2.setText(this.readFileByTrackMap(switchMap));
 							}else{
@@ -101,13 +103,13 @@ public class Departure extends Thread{
 	public String[] readFileBySwitchMap(){
 		File file = new File("switchMap.txt");
         BufferedReader reader = null;
-        String[] switchMap=new String[8];
+        String[] switchMap=new String[13];
         try {
             reader = new BufferedReader(new FileReader(file));
             String tempString = null;
             int i=0;
             while ((tempString = reader.readLine()) != null) {
-            	if(i>=8){
+            	if(i>=13){
             		break;
             	}
             	switchMap[i]=tempString;
@@ -123,11 +125,9 @@ public class Departure extends Thread{
                 }
             }
         }
-        
-        
-        return switchMap;
-        
-        
+        //for(int zz=0;zz<switchMap.length;zz++)
+        	//System.out.print(switchMap[zz]+" ");
+        return switchMap;        
 	}
 	
 	public String readFileByTrackMap(String[] switchMap){
@@ -162,16 +162,18 @@ public class Departure extends Thread{
         if(trackMap==null ||"".equals(trackMap)){
         	return "";
         }
-        if(trackMap.trim().length()!=8){
+        if(trackMap.trim().length()!=12){
+        	//System.out.println(trackMap.trim().length());
         	return "";
         }
         
         //System.out.println(trackMap);
         
         String content ="";
-        for(int i=0;i<8;i++){
+        String s= "";
+        for(int i=0;i<12;i++){
         	int index= Integer.parseInt(trackMap.substring(i,i+1));
-        	String s = switchMap[i];
+        	 s = switchMap[i];
         	//System.out.println(s);
         	if(s==null ||"".equals(s.trim())){
         		return "";
@@ -207,6 +209,8 @@ public class Departure extends Thread{
 	                	return tempString;
 	                }
 	            }
+	            //read from track model
+	            return traino + " " + trackmodel.getOccupancy(traino);
 	        } catch (IOException e) {
 	            e.printStackTrace();
 	        } finally {

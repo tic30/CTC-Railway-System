@@ -68,8 +68,8 @@ public class UpdateSpeedFrame extends JFrame implements ActionListener{
 	    comboBox_1.addItemListener(new ItemListener(){
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				System.out.println(comboBox_1.getSelectedIndex());
-				System.out.println(comboBox_1.getSelectedItem());
+				//System.out.println(comboBox_1.getSelectedIndex());
+				//System.out.println(comboBox_1.getSelectedItem());
 			}
 	    	
 	    });
@@ -126,22 +126,22 @@ public class UpdateSpeedFrame extends JFrame implements ActionListener{
 	    comboBox_1.addItemListener(new ItemListener(){
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				System.out.println(comboBox_1.getSelectedIndex());
+				//System.out.println(comboBox_1.getSelectedIndex());
 				String line = (String)comboBox_1.getSelectedItem();
-				System.out.println(line);
+				//System.out.println(line);
 				comboBox_2.removeAll();
 				if("Green".equals(line)){
 					
 					 if(greenTraces!=null &&greenTraces.size()>0){
 					    	for(Trace trace:greenTraces){
-					    		System.out.println(trace.getBlocknumber());
+					    		//System.out.println(trace.getBlocknumber());
 					    		comboBox_2.addItem(trace.getBlocknumber());
 					    	}
 					    }
 				}else if("Red".equals(line)){
 					 if(redTraces!=null &&redTraces.size()>0){
 					    	for(Trace trace:redTraces){
-					    		System.out.println(trace.getBlocknumber());
+					    		//System.out.println(trace.getBlocknumber());
 					    		comboBox_2.addItem(trace.getBlocknumber());
 					    	}
 					    }

@@ -66,7 +66,7 @@ public class UpdateAuthorityFrame extends JFrame implements ActionListener{
 	    comboBox.addItemListener(new ItemListener(){
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				System.out.println(comboBox.getSelectedIndex());
+				//System.out.println(comboBox.getSelectedIndex());
 			}
 	    	
 	    });
@@ -160,7 +160,7 @@ public class UpdateAuthorityFrame extends JFrame implements ActionListener{
 						}
 					}
 					schedule.setAuthsequence(authsequence);
-					System.out.println(authsequence);
+					//System.out.println(authsequence);
 					
 					String speedsequence="";
 					for(int i=len/2;i<len;i++){
