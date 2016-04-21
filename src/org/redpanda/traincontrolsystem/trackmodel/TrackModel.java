@@ -38,7 +38,8 @@ public class TrackModel
             if (clockSpeedString.equals("Normal Clockspeed")){ clockSpeed=1;}
             else{ clockSpeed=10;}
             //new user interface
-            trackModelUI=TrackModelUI.getInstance();  
+            trackModelUI=TrackModelUI.getInstance(); 
+            trackModelUI.createModel();
 	}
         
         //NEW TRACK MODEL
@@ -76,24 +77,29 @@ public class TrackModel
                double limit=t1.get(i).getSpeedlimit();
                limit=limit* 0.621371;
                double e=t1.get(i).getElevation();
-               
-                greenSegments[i]=new TrackSegment(bn, limit, len, grade, e);
+               greenSegments[i]=new TrackSegment(bn, limit, len, grade, e);
+                
                 String check=t1.get(i).checkForStation();
-                if (!(check==null)){
+                if (!(check==null)){ //segment has station
                     greenSegments[i].giveStation(check);
-                    System.out.println(check);
-                } //segment has a station
+                    System.out.println(check);} 
                 
+                boolean check2=t1.get(i).checkForCrossing(); 
+                if (check2){ //has crossing
+                    greenSegments[i].hasCrossing=true;
+                    //trackModelUI.addcrossingtoUI(bn);
+                }
                 
-                /*if (t.checkForCrossing()){
-                    redSegments[i].hasCrossing=true;
+                boolean check3=t1.get(i).checkForSwitch(); 
+                if (check3){
+                   greenSegments[i].hasSwitch=true;
+                    //trackModelUI.addswitchtoUI(bn);
                 }
-                if (t.checkForSwitch()){
-                    redSegments[i].hasSwitch=true;
-                }
-                if (t.checkForUnderground()){
-                    redSegments[i].isUnderground=true;
-                }*/
+                
+                boolean check4=t1.get(i).checkForUnderground();
+                if (check4){
+                   greenSegments[i].isUnderground=true;}
+                
                i++;
                if (i==numGreenSegs){break;}
            }
@@ -101,7 +107,7 @@ public class TrackModel
             //RED TRACK 
             List<Trace> t2 = ExcelUtil.readTrace(filename, "red");
             for (Trace t : t2) { numRedSegs++;}
-            System.out.println("Reading Red Complete, Number : "+numRedSegs);
+            System.out.println("Reading Green Complete, Number : "+numRedSegs);
             redSegments=new TrackSegment[numRedSegs];
             t2 = ExcelUtil.readTrace(filename, "red");
             int j=0;
@@ -114,24 +120,33 @@ public class TrackModel
                double limit=t2.get(j).getSpeedlimit();
                limit=limit* 0.621371;
                double e=t2.get(j).getElevation();
-               
-                redSegments[j]=new TrackSegment(bn, limit, len, grade, e);
-                /*if (!(t.checkForStation()==null)){
-                    redSegments[i].giveStation(t.checkForStation());
+               redSegments[j]=new TrackSegment(bn, limit, len, grade, e);
+                
+                String check=t2.get(j).checkForStation();
+                if (!(check==null)){ //segment has station
+                    redSegments[j].giveStation(check);
+                    System.out.println(check);} 
+                
+                boolean check2=t2.get(j).checkForCrossing(); 
+                if (check2){ //has crossing
+                    redSegments[j].hasCrossing=true;
+                    //trackModelUI.addcrossingtoUI(bn);
                 }
-                if (t.checkForCrossing()){
-                    redSegments[i].hasCrossing=true;
+                
+                boolean check3=t2.get(j).checkForSwitch(); 
+                if (check3){
+                   redSegments[j].hasSwitch=true;
+                    //trackModelUI.addswitchtoUI(bn);
                 }
-                if (t.checkForSwitch()){
-                    redSegments[i].hasSwitch=true;
-                }
-                if (t.checkForUnderground()){
-                    redSegments[i].isUnderground=true;
-                }
-                System.out.println("got through round " + i);*/
-              j++;
+                
+                boolean check4=t2.get(j).checkForUnderground();
+                if (check4){
+                   redSegments[j].isUnderground=true;}
+                
+               j++;
                if (j==numRedSegs){break;}
            }
+            
             
             /* while (still info to read)
             {
