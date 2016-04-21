@@ -1,0 +1,124 @@
+package cn.ctc.bean;
+
+public class Trace {
+
+	private String line;
+	private String Section;
+	private String blocknumber;
+	private double blocklength;// (m)
+	private double blockgrade;// (%)
+        double blockelevation; //(m)
+	private double speedlimit;// (Km/Hr)
+        boolean hasInfrastructure=false;
+        boolean hasStation=false;
+        String stationName;
+        boolean hasSwitch=false;
+        boolean hasCrossing=false;
+        boolean isUnderground=false;
+
+	public String getLine() {
+		return line;
+	}
+
+	public void setLine(String line) {
+		this.line = line;
+	}
+
+	public String getSection() {
+		return Section;
+	}
+
+	public void setSection(String section) {
+		Section = section;
+	}
+
+	public String getBlocknumber() {
+		return blocknumber;
+	}
+
+	public void setBlocknumber(String blocknumber) {
+		this.blocknumber = blocknumber;
+	}
+
+	public double getBlocklength() {
+		return blocklength;
+	}
+
+	public void setBlocklength(double blocklength) {
+		this.blocklength = blocklength;
+	}
+
+	public double getBlockgrade() {
+		return blockgrade;
+	}
+
+	public void setBlockgrade(double blockgrade) {
+		this.blockgrade = blockgrade;
+	}
+
+	public double getSpeedlimit() {
+		return speedlimit;
+	}
+
+	public void setSpeedlimit(double speedlimit) {
+		this.speedlimit = speedlimit;
+	}
+        
+        public void setElevation(double e){
+                this.blockelevation=e;
+        }
+        
+        public double getElevation(){
+            return blockelevation;
+        }
+        
+        public void giveInfrastructure(String s)
+        {
+            this.hasInfrastructure=true;
+            if (s.toLowerCase().contains("station")){
+                this.hasStation=true;
+                String str=new String(s);
+                this.stationName=str.substring(8,13);
+            }
+            if (s.toLowerCase().contains("switch")){
+                this.hasSwitch=true;
+            }
+            if (s.toLowerCase().contains("crossing")){
+                this.hasCrossing=true;
+            }
+            if (s.toLowerCase().contains("underground")){
+                this.isUnderground=true;
+            }
+        }
+        
+        public String checkForStation(){
+            if (this.hasStation)
+            {
+                return stationName;
+            }
+            else{
+                return null;
+            }
+        }
+        
+        public boolean checkForSwitch(){
+            return hasSwitch;
+        }
+        
+        public boolean checkForCrossing(){
+            return hasCrossing;
+        }
+        
+        public boolean checkForUnderground(){
+            return isUnderground;
+        }
+
+	@Override
+	public String toString() {
+		return "Trace [line=" + line + ", Section=" + Section
+				+ ", blocknumber=" + blocknumber + ", blocklength="
+				+ blocklength + ", blockgrade=" + blockgrade + ", speedlimit="
+				+ speedlimit + "]";
+	}
+
+}
