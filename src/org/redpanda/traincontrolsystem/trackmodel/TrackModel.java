@@ -4,19 +4,23 @@ package org.redpanda.traincontrolsystem.trackmodel;
 import java.io.File;
 import javax.swing.*;
 import java.util.*;
+import java.util.ArrayList;
 
 import cn.ctc.bean.Schedule;
 import cn.ctc.Timer;
 import cn.ctc.bean.Trace;
 import cn.ctc.util.ExcelUtil;
+import cn.ctc.util.ScheduleUtil;
 import org.redpanda.traincontrolsystem.trainmodel.Train;
 
 public class TrackModel 
 {	
+        private static TrackModel instance;
         private static TrackModelUI trackModelUI;
         static int clockSpeed;
         
         Timer t;
+        String[] stations;
         String[] switches;
         String[] crossings;
         int[] speeds;
@@ -90,13 +94,13 @@ public class TrackModel
                 boolean check2=t1.get(i).checkForCrossing(); 
                 if (check2){ //has crossing
                     greenSegments[i].hasCrossing=true;
-                    //trackModelUI.addcrossingtoUI(bn);
+                    trackModelUI.addcrossingtoUI(bn);
                 }
                 
                 boolean check3=t1.get(i).checkForSwitch(); 
                 if (check3){
                    greenSegments[i].hasSwitch=true;
-                    //trackModelUI.addswitchtoUI(bn);
+                    trackModelUI.addswitchtoUI(bn);
                 }
                 
                 boolean check4=t1.get(i).checkForUnderground();
@@ -133,13 +137,13 @@ public class TrackModel
                 boolean check2=t2.get(j).checkForCrossing(); 
                 if (check2){ //has crossing
                     redSegments[j].hasCrossing=true;
-                    //trackModelUI.addcrossingtoUI(bn);
+                    trackModelUI.addcrossingtoUI(bn);
                 }
                 
                 boolean check3=t2.get(j).checkForSwitch(); 
                 if (check3){
                    redSegments[j].hasSwitch=true;
-                    //trackModelUI.addswitchtoUI(bn);
+                    trackModelUI.addswitchtoUI(bn);
                 }
                 
                 boolean check4=t2.get(j).checkForUnderground();
@@ -157,24 +161,64 @@ public class TrackModel
         
         public void getSchedule()
         {
-            List<Schedule> scheduleFile = ExcelUtil.readSchedule("schedule.xlsx");
-            for(Schedule x :scheduleFile) {numTrains++;}
+            List<String> schedule=ScheduleUtil.getSchedule();
+            //automate
+            numTrains=schedule.size();
             
             trainfollowers=new TrainFollower[numTrains];
             
-            int i=0;
-            for(Schedule x :scheduleFile) //while still trains to schedule
+            for(int i=0;i<numTrains;i++) //while still trains to schedule
             {
-		String l = x.getLine(); //line color
-                String d=x.getDeparturetime(); //depart time
-                String as = x.getAuthsequence().replaceAll(",", " "); //auth seq
-                int ss=x.getMinSpeed(); // train speed for whole
-                trainfollowers[i]=new TrainFollower();
+		String parser=schedule.get(i);
+                //trainNo + ‘ ‘ +authority+ ‘ ‘ +authSequence+ ‘ ‘ +speedSequence
+                //g1 5 152 63 64 65 66 30 50 50 50 50
+                char l = parser.charAt(0); //line colo
+                
+                char n=parser.charAt(1);
+                String s2=new String(""+n);
+                int number=Integer.parseInt(s2);
+                
+                int numauths=(int)parser.charAt(3);
+                String[] data = parser.substring(5, parser.length()).split(" ");
+                int[] auths2=new int[numauths];
+                for (int j=0;j<numauths;j++){
+                    auths2[i]=Integer.parseInt(data[j]);}
+                int ss=Integer.parseInt(data[numauths+1]); // train speed for whole
+                //get lengths of each segment
+                
+                
+                TrackSegment[] sender=null;
+                String color=null;
+                if (l=='r'){
+                    sender=redSegments;
+                    color="r";}
+                if (l=='g'){ 
+                    sender=greenSegments;
+                    color="g";}
+                
+                double[] lens=getAuthLens(auths2, sender);
+                
+                trainfollowers[i]=new TrainFollower(number,color,auths2,lens,sender,ss); 
                 i++;
             }
         }
         
-        public Train[] getTrains(){
-            return trains;
+        public double[] getAuthLens(int[] a, TrackSegment[] ts){
+            double[] l=new double[a.length];
+            for (int i=0;i<a.length;i++){
+                for (int j=0;j<ts.length;j++){
+                    if (a[i]==ts[j].blockNum){
+                        l[i]=ts[j].length; }}}
+            return l;}
+        
+        public String getOccupancy(int trainNum){
+            String s="";
+            for (int i=0;i<trainfollowers.length;i++){
+                if (trainNum==trainfollowers[i].trainNum)
+                {
+                    s=trainfollowers[i].getCurrBlock();
+                }
+            }
+            return s;
         }
 }
