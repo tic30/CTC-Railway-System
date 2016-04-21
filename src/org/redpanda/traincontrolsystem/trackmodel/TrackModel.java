@@ -8,24 +8,34 @@ import java.util.*;
 
 import cn.ctc.bean.Schedule;
 import cn.ctc.bean.Trace;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import cn.ctc.util.ExcelUtil;
 import org.redpanda.traincontrolsystem.trainmodel.Train;
 
 public class TrackModel 
 {	
-        private static File inputFile;
         private static TrackModelUI trackModelUI;
         static int clockSpeed;
         
         Train[] trains;
-        String[] switches={ "switch 1", "switch 2", "switch 3"};
-        String[] crossings={ "crossing 1", "crossing 2", "crossing 3"};
-        private int[] speeds;
-        private int numTrains=0;
+        String[] switches;
+        String[] crossings;
+        int[] speeds;
+        int numTrains=0;
         String filename;
         
-        TrackSegment[] redSegments;
-        TrackSegment[] greenSegments;
+        TrackSegment[] greenSegments=new TrackSegment[10];
+        TrackSegment[] redSegments=new TrackSegment[10];
+        int numRedSegs=0, numGreenSegs=0;
         
         private static final String[] clockSpeedOptions = { "Normal Clockspeed", "10 Times Clockspeed"};
         
@@ -50,12 +60,11 @@ public class TrackModel
             do{
                 if (inFile.equals("")){
                     inFile=("Track Layout & Vehicle Data vF1.xlsx"); //automatic mode
-                    new TrackModel(inFile);
                 }
                 else{
                     inFile = JOptionPane.showInputDialog(frame2, "Choose a file to load for the Track Model (must be a .xlsx file)");
                 }
-            }while (!(inFile.toLowerCase().contains(".xlsx")));
+            }while (!(inFile.toLowerCase().contains(".xlsx")) || (!(new File(inFile)).exists()));
             new TrackModel(inFile);
         }
         
@@ -63,16 +72,40 @@ public class TrackModel
         public TrackModel(String filename) //New track model, specified settings
         {
             //GET TRACK FROM FILE
-            List<Trace> t1 = ExcelUtil.readTrace(filename, "green");
-            for (Trace s : t1) {
-                System.out.println(s.toString());}
-            System.out.println("Reading Green Complete");
+            List<Trace> t1 = ExcelUtil.readTrace(filename, "red");
+            for (Trace t : t1) { numRedSegs++;}
+            System.out.println("Reading Red Complete, Number : "+numRedSegs);
+            redSegments=new TrackSegment[numRedSegs];
+            t1 = ExcelUtil.readTrace(filename, "red");
+            int i=0;
             
-            List<Trace> t2 = ExcelUtil.readTrace(filename, "red");
-            for (Trace s : t2) {
-                System.out.println(s.toString());}
-            System.out.println("Reading Red Complete");
-                
+            for (Trace t : t1) { //new track values
+               String block=t1.get(i).getBlocknumber();
+               int bn=Integer.parseInt(block);
+               double len=t1.get(i).getBlocklength();
+               double grade=t1.get(i).getBlockgrade();
+               double limit=t1.get(i).getSpeedlimit();
+               limit=limit* 0.621371;
+               //elevation 
+               
+                redSegments[i]=new TrackSegment(bn, limit, len, grade, 0);
+                /*if (!(t.checkForStation()==null)){
+                    redSegments[i].giveStation(t.checkForStation());
+                }
+                if (t.checkForCrossing()){
+                    redSegments[i].hasCrossing=true;
+                }
+                if (t.checkForSwitch()){
+                    redSegments[i].hasSwitch=true;
+                }
+                if (t.checkForUnderground()){
+                    redSegments[i].isUnderground=true;
+                }
+                System.out.println("got through round " + i);*/
+               i++;
+               if (i==numRedSegs){break;}
+           }
+            
             /* while (still info to read)
             {
                   //for each row
