@@ -170,7 +170,7 @@ public class TrainController
 			{	
 				//A loop will ensure that the driver doesn't enter a speed above the speed limit
 				String speed1 = JOptionPane.showInputDialog("Please enter desired speed (mph)");
-				if(speed1 != NULL)
+				if(speed1 != null)
 					speed = Double.parseDouble(speed1);
 				else
 					speed = speed;
