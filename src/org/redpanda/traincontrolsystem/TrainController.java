@@ -177,7 +177,7 @@ public class TrainController
 				//This if statement double checks speed 
 				if(speed > givenspeed && check == false)
 				{
-					JOptionPane.showMessageDialog(null, "Entered speed greater than limit. Speed set to: " + String.valueOf(givenspeed));)
+					JOptionPane.showMessageDialog(null, "Entered speed greater than limit. Speed set to: " + String.valueOf(givenspeed));
 					speed = givenspeed;
 				}
 				
@@ -274,10 +274,10 @@ public class TrainController
 	{
 		//Get the updates from the train model
 		currspeed = Tmodel.getSpeed();
-		givenspeed = getSetSpeed();
+		givenspeed = Tmodel.getSetpointSpeed();
 		authority = Tmodel.getAuthority();
 		engbroken = Tmodel.getEngineFailure();
-		sigbroken = Tmodel.getSignlaFailure();
+		sigbroken = Tmodel.getSignalFailure();
 		brakebroken = Tmodel.getBrakeFailure();
 		doorstatus = Tmodel.doorsOpen();
 		lightstatus = Tmodel.lightsOn();
@@ -456,9 +456,9 @@ public class TrainController
 	{
 		//How do i know when to turn lights on
 		if(command == true)
-			turnLightsOn();
+			Tmodel.turnLightsOn();
 		else
-			turnLightsOff();
+			Tmodel.turnLightsOff();
 	}
 	
 	//This function checks the train to make sure the update from the Train Model didn't include faults
