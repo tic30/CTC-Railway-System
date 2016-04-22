@@ -1,4 +1,8 @@
-package org.redpanda.traincontrolsystem.trackmodel;
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.redpanda.traincontrolsystem.trackmodelstandalone;
 // TrackModel.java
 // Author: Tatiana Sunseri
 import java.io.File;
@@ -32,6 +36,8 @@ public class TrackModel
         TrackSegment[] greenSegments=new TrackSegment[10];
         TrackSegment[] redSegments=new TrackSegment[10];
         int numRedSegs=0, numGreenSegs=0;
+        
+        
         
         private static final String[] clockSpeedOptions = { "Normal Clockspeed", "10 Times Clockspeed"};
         
@@ -108,6 +114,7 @@ public class TrackModel
                    greenSegments[i].isUnderground=true;}
                 
                i++;
+               trackModelUI.addTrackPiece(t.toString());
                if (i==numGreenSegs){break;}
            }
             
@@ -151,6 +158,7 @@ public class TrackModel
                    redSegments[j].isUnderground=true;}
                 
                j++;
+               //trackModelUI.addTrackPiece(t.toString());
                if (j==numRedSegs){break;}
            }
             //trackModelUI.addgreenTrack();
@@ -161,67 +169,58 @@ public class TrackModel
         
         public void getSchedule()
         {
-            List<String> schedule=ScheduleUtil.getSchedule();
-            //automate
-            numTrains=schedule.size();
+            List<Schedule> scheduleFile = ExcelUtil.readSchedule("schedule.xlsx");
+            for(Schedule x :scheduleFile) {numTrains++;}
             
             trainfollowers=new TrainFollower[numTrains];
             
-            for(int i=0;i<numTrains;i++) //while still trains to schedule
+            int i=0;
+            for(Schedule x :scheduleFile) //while still trains to schedule
             {
-		String parser=schedule.get(i);
-                //trainNo + ‘ ‘ +authority+ ‘ ‘ +authSequence+ ‘ ‘ +speedSequence
-                //g1 5 152 63 64 65 66 30 50 50 50 50
-                char l = parser.charAt(0); //line colo
-                
-                char n=parser.charAt(1);
-                String s2=new String(""+n);
-                int number=Integer.parseInt(s2);
-                
-                int numauths=(int)parser.charAt(3);
-                String[] data = parser.substring(5, parser.length()).split(" ");
-                int[] auths2=new int[numauths];
-                for (int j=0;j<numauths;j++){
-                    auths2[i]=Integer.parseInt(data[j]);}
-                int ss=Integer.parseInt(data[numauths+1]); // train speed for whole
+		String l = x.getLine(); //line color
+                String d=x.getDeparturetime(); //depart time
+                String as = x.getAuthsequence().replaceAll(",", " "); //auth seq
+                int ss=x.getMinSpeed(); // train speed for whole
                 //get lengths of each segment
+                String[] auths = as.split(" ");
+                int[] auths2=new int[auths.length];
+                for (int k=0;k<auths.length;k++){
+                    auths2[k]=Integer.parseInt(auths[k]);
+                }
                 
                 
                 TrackSegment[] sender=null;
                 String color=null;
-                if (l=='r'){
+                if (l.equals("red")){
                     sender=redSegments;
                     color="r";}
-                if (l=='g'){ 
+                if (l.equals("green")){ 
                     sender=greenSegments;
                     color="g";}
                 
-                double[] lens=getAuthLens(auths2, sender);
-                
-                trainfollowers[i]=new TrainFollower(number,color,auths2,lens,sender,ss); 
+                //double[] lens=getAuthLens(auths, sender);
+                trains[i]=new Train();
+                //trainfollowers[i]=new TrainFollower(clockspeed,color,d,auths2,lens,sender,ss); 
                 i++;
             }
         }
         
-        public double[] getAuthLens(int[] a, TrackSegment[] ts){
+        /*public double[] getAuthLens(String[] a, TrackSegment[] ts){
             double[] l=new double[a.length];
             for (int i=0;i<a.length;i++){
                 for (int j=0;j<ts.length;j++){
-                    if (a[i]==ts[j].blockNum){
+                    if (Integer.parseInt(a[i])==ts[j].blockNum){
                         l[i]=ts[j].length; }}}
-            return l;}
+            return l;}*/
         
-       public int getOccupancy(String trainName){
-           // char s= trainName.charAt(0);
-            //String newString=(""+s);
-            int trainNum=Integer.parseInt(trainName.substring(1,trainName.length()));
-            int x=0;;
+        public String getOccupancy(int trainNum){
+            String s="";
             for (int i=0;i<trainfollowers.length;i++){
                 if (trainNum==trainfollowers[i].trainNum)
                 {
-                    x=trainfollowers[i].currBlock;
+                    s=trainfollowers[i].getCurrBlock();
                 }
             }
-            return x; //return block train is on
+            return s;
         }
 }
