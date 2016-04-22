@@ -1,4 +1,8 @@
-package org.redpanda.traincontrolsystem.trackmodel;
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.redpanda.traincontrolsystem.trackmodelstandalone;
 
 import org.redpanda.traincontrolsystem.trainmodel.Train;
 
@@ -7,6 +11,7 @@ import java.awt.event.*;
 
 public class TrainFollower implements ActionListener {
         Train train;
+        int clockspeed;
         int trainNum;
         String railcolor;
         int speed;
@@ -23,15 +28,15 @@ public class TrainFollower implements ActionListener {
         private Timer T;
     
         // TrainFollower(color,d,auths,lens,sender); //railcolor, dispatch time, authority array, authority lengths, rail segments
-        public  TrainFollower(int num,String rc, int[] a, double[] l, TrackSegment[] ts, int sp) { 
+        public  TrainFollower(int cs, String rc, String d, int[] a, double[] l, TrackSegment[] ts, int sp) { 
+            this.clockspeed=cs;
             this.train=new Train();
-            this.trainNum=num;
             this.railcolor=rc;
+            this.dispatchtime=d;
             this.authority=a;
             this.lengths=l;
             this.railsegments=ts;
             this.speed=sp;
-            
             /*int stringlen=d.length();
             dispatchsec=Integer.parseInt(d.substring(stringlen-2, stringlen-1));
             dispatchmin=Integer.parseInt(d.substring(stringlen-5, stringlen-4));
@@ -51,7 +56,12 @@ public class TrainFollower implements ActionListener {
             s=0; min=0; hr=0;
             endReached=false;
             moving=true;
-            T=new Timer(1000, this);
+            if (clockspeed==1){
+                T=new Timer(1000, this);
+            }
+            if (clockspeed==10){
+                T=new Timer(1000, this);
+            }
         }
         
             public void actionPerformed(ActionEvent e) 
