@@ -1,4 +1,5 @@
-package org.redpanda.traincontrolsystem.trackmodel;
+package org.redpanda.traincontrolsystem.trackmodelstandalone;
+
 
 class TrackSegment 
 {
@@ -7,6 +8,7 @@ class TrackSegment
          boolean hasStation=false, hasSwitch=false, hasCrossing=false, isUnderground=false;;
          boolean hasTrackFailure, hasCircuitFailure;
          String stationName;
+         boolean hasTrain;
          
          public TrackSegment(){
              this(0,0,0,0,0);
