@@ -1,4 +1,8 @@
-package org.redpanda.traincontrolsystem.trackmodel;
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.redpanda.traincontrolsystem.trackmodelstandalone;
 
 import org.redpanda.traincontrolsystem.trainmodel.Train;
 
@@ -26,7 +30,10 @@ public class TrackModelUI extends JPanel{
         
         private DefaultListModel<String> model; //warning info
 	private JList<String> failureList;
+        private DefaultListModel<String> model2; //warning info
+	private JList<String> tracklist;
         private JScrollPane failurePane;
+        private JScrollPane trackPane;
         private JPanel failurePanel= new JPanel();
         private JPanel failureButtonPanel=new JPanel();
         private JTextField addFailure=new JTextField("Add Failure");
@@ -37,13 +44,14 @@ public class TrackModelUI extends JPanel{
         
         private int temp, maxPass;
         private JLabel tempLabel, railLabel; 
-        private JLabel passengerLabel=new JLabel("Number Passengers on Train: 0");
+        private JLabel passengerLabel=new JLabel("Number Passengers on Train: ");
         private JLabel passLimLabel = new JLabel("Max Number of Passengers per Car: ");
         
         private JPanel topHalf=new JPanel();
         private JPanel infoPanel1=new JPanel();
         private JPanel infoPanel2=new JPanel();
         private JPanel inputPanel=new JPanel();
+        private JPanel trackPanel=new JPanel();
         
         private TrackModel trackModel;
         
@@ -93,6 +101,7 @@ public class TrackModelUI extends JPanel{
                     railLabel=new JLabel("Rails not Heated");}
                 infoPanel2.add(tempLabel);
                 infoPanel2.add(railLabel);
+                passengerLabel.setText("Number Passengers on Train: "+ThreadLocalRandom.current().nextInt(20, 85 + 1));
                 infoPanel2.add(passengerLabel);
                 infoPanel2.add(passLimLabel);
                 topHalf.setLayout(new GridLayout(3,1));
@@ -117,9 +126,16 @@ public class TrackModelUI extends JPanel{
                 failurePanel.add(failurePane);
                 failurePanel.add(failureButtonPanel);
                 
+                //TRACK PANEL
+                model2 = new DefaultListModel<String>();
+                tracklist = new JList<String>(model2);
+                trackPane = new JScrollPane(tracklist);
+                model2.addElement("Track Pieces" );
+                trackPanel.add(trackPane);
+                
                 theWindow.getContentPane().add(topHalf);
                 theWindow.getContentPane().add(failurePanel);
-                //add track half
+                theWindow.getContentPane().add(trackPanel);
                 
                 theWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		theWindow.setSize(1000,1000);
@@ -157,6 +173,11 @@ public class TrackModelUI extends JPanel{
        crossings[numCrossings]=new String("Crossing "+blockNumber);
        crossingList.addItem(crossings[numCrossings]);
        numCrossings++;
+   }
+   
+   public void addTrackPiece(String s)  
+   {
+        model2.addElement(s);
    }
     
     private class AddFailureActionListener implements ActionListener {
